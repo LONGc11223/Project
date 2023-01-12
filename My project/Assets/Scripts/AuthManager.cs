@@ -16,22 +16,25 @@ namespace Managers
 
         void Start()
         {
-            FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith( task =>
-            {
-                dependencyStatus = task.Result;
+            while (!MainManager.Instance.setup) {}
+            InitializeFirebase();
 
-                if (dependencyStatus == DependencyStatus.Available)
-                {
-                    auth = FirebaseAuth.DefaultInstance;
+            // FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith( task =>
+            // {
+            //     dependencyStatus = task.Result;
 
-                    auth.StateChanged += AuthStateChanged;
-                    AuthStateChanged(this, null);
-                }
-                else
-                {
-                    Debug.LogError("Missing Dependencies!");
-                }
-            });
+            //     if (dependencyStatus == DependencyStatus.Available)
+            //     {
+            //         auth = FirebaseAuth.DefaultInstance;
+
+            //         auth.StateChanged += AuthStateChanged;
+            //         AuthStateChanged(this, null);
+            //     }
+            //     else
+            //     {
+            //         Debug.LogError("Missing Dependencies!");
+            //     }
+            // });
         }
 
         void InitializeFirebase() {
@@ -88,13 +91,14 @@ namespace Managers
         {
             var loginTask = auth.SignInWithEmailAndPasswordAsync(email, password);
             // Wait until user is created
+            Debug.Log("Waiting");
             yield return new WaitUntil(predicate: () => loginTask.IsCompleted);
 
             if (loginTask.Exception == null)
             {
                 Debug.Log($"User logged in successfully!");
                 user = loginTask.Result;
-                // SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
             }
         }
 

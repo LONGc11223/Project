@@ -18,7 +18,6 @@ public class LoginHandler : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(AuthManager.active);
         if (AuthManager.active == true && SceneManager.GetActiveScene().buildIndex == 1)
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
@@ -48,7 +47,7 @@ public class LoginHandler : MonoBehaviour
     public void SignOutButton()
     {
         AuthManager auth = MainManager.Instance.authManager;
-
+        Debug.Log("Attempting to login the user!");
         auth.SignOut();
     }
     public void LoginButton()
@@ -58,7 +57,7 @@ public class LoginHandler : MonoBehaviour
         string password = passwordLoginField.text; 
 
         AuthManager auth = MainManager.Instance.authManager;
-
+        Debug.Log("Attempting to login the user!");
         StartCoroutine(auth.Login(email,password));
     }
 }
