@@ -6241,6 +6241,8 @@ MonoBehaviour:
   sad: {fileID: 21300000, guid: b315f4d2105ab44df97bd79731b3159d, type: 3}
   angry: {fileID: 21300000, guid: 5102d9b05fef84bd6a902d5b22b3383b, type: 3}
   hungry: {fileID: 21300000, guid: c412b28ada7c94265865d9a77673799d, type: 3}
+  image: {fileID: 0}
+  petMood: 0
 --- !u!114 &2084256283
 MonoBehaviour:
   m_ObjectHideFlags: 0
