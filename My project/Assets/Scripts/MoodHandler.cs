@@ -7,12 +7,12 @@ public class MoodHandler : MonoBehaviour
 {
     public Sprite happy;
     public Sprite sad;
-    public Sprite angry;
+    public Sprite neutral;
     public Sprite hungry;
 
     public Image image;
 
-    public enum Mood { happy, sad, angry, hungry }
+    public enum Mood { happy, sad, neutral, hungry }
     public Mood petMood;
 
     // Start is called before the first frame update
@@ -33,8 +33,8 @@ public class MoodHandler : MonoBehaviour
             case Mood.sad:
                 image.sprite = sad;
                 break;
-            case Mood.angry:
-                image.sprite = angry;
+            case Mood.neutral:
+                image.sprite = neutral;
                 break;
             case Mood.hungry:
                 image.sprite = hungry;

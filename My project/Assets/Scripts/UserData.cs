@@ -11,6 +11,5 @@ public struct UserData
     public Dictionary<string, object> HealthData { get; set; }
 
     [FirestoreProperty]
-
     public Dictionary<string,string> PetData { get; set; }
 }
