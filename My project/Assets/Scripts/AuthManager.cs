@@ -5,6 +5,8 @@ using Firebase;
 using Firebase.Auth;
 using Firebase.Firestore;
 using UnityEngine.SceneManagement;
+using Firebase.Firestore;
+using Firebase.Extensions;
 
 namespace Managers
 {
@@ -14,6 +16,7 @@ namespace Managers
         public static bool active;
         public FirebaseAuth auth;
         public FirebaseUser user;
+        FirebaseFirestore db;
 
         void Start()
         {
@@ -39,6 +42,7 @@ namespace Managers
         }
 
         void InitializeFirebase() {
+            db = FirebaseFirestore.DefaultInstance;
             auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
             auth.StateChanged += AuthStateChanged;
             AuthStateChanged(this, null);
@@ -83,6 +87,27 @@ namespace Managers
                 if (user != null)
                 {
                     // Do database thing here
+                    DocumentReference docRef = db.Collection("UserData").Document(user.UserId);
+                    Dictionary<string, object> initialData = new Dictionary<string, object>
+                    {
+                            { "Currency", 0 },
+                            { "Environment", "Original" },
+                            { "HealthData", new Dictionary<string, object>
+                                {
+                                    { "CaloriesBurned", 0 },
+                                    { "ExerciseMinutes", 0 },
+                                }
+                            },
+                            { "PetData", new Dictionary<string, object>
+                                {
+                                    { "Mood", "Neutral" },
+                                    { "PetAppearance", "GoldenRetriever" },
+                                }
+                            }
+                    };
+                    docRef.SetAsync(initialData).ContinueWithOnMainThread(task => {
+                            Debug.Log("User's save data created!.");
+                    });
                 }
             }
 
