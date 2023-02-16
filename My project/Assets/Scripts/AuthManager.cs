@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Firebase;
 using Firebase.Auth;
+using Firebase.Firestore;
 using UnityEngine.SceneManagement;
 
 namespace Managers
