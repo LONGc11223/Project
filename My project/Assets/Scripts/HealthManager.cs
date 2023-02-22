@@ -26,18 +26,39 @@ namespace Managers
         // Start is called before the first frame update
         void Start()
         {
-            _requestAuthorization();
-            moveRing = _getCurrentMoveRingValue();
-            exerciseRing = _getCurrentExerciseRingValue();
-            moveGoal = _getMoveRingGoal();
+            if (!Application.isEditor)
+            {
+                _requestAuthorization();
+                moveRing = _getCurrentMoveRingValue();
+                exerciseRing = _getCurrentExerciseRingValue();
+                moveGoal = _getMoveRingGoal();
+            }
         }
 
-        // Update is called once per frame
-        void Update()
+        // // Update is called once per frame
+        // void Update()
+        // {
+        //     moveRing = _getCurrentMoveRingValue();
+        //     exerciseRing = _getCurrentExerciseRingValue();
+        //     moveGoal = _getMoveRingGoal();
+        // }
+
+        public double GetMoveRing()
         {
             moveRing = _getCurrentMoveRingValue();
-            exerciseRing = _getCurrentExerciseRingValue();
+            return moveRing;
+        }
+
+        public double GetMoveGoal()
+        {
             moveGoal = _getMoveRingGoal();
+            return moveGoal;
+        }
+
+        public double GetExerciseRing()
+        {
+            exerciseRing = _getCurrentExerciseRingValue();
+            return exerciseRing;
         }
     }
 }

@@ -1,49 +1,45 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using UnityEngine;
+using Managers;
 using TMPro;
 
 public class HealthHandler : MonoBehaviour
 {
-    [DllImport("__Internal")]
-    private static extern void _requestAuthorization();
+    public Image moveRing;
+    public Image exerciseRing;
+    public TextMeshProUGUI progressText;
 
-    [DllImport("__Internal")]
-    private static extern double _getCurrentMoveRingValue();
-
-    [DllImport("__Internal")]
-    private static extern double _getCurrentExerciseRingValue();
-
-    [DllImport("__Internal")]
-    private static extern double _getMoveRingGoal();
-
-    public double moveRing;
-    public double exerciseRing;
-    public double moveGoal;
-
-    public TextMeshProUGUI healthText;
+    double moveRingValue;
+    double moveRingGoal;
+    double exerciseRingValue;
+    
     // Start is called before the first frame update
     void Start()
     {
-        _requestAuthorization();
-        moveRing = _getCurrentMoveRingValue();
-        exerciseRing = _getCurrentExerciseRingValue();
-        moveGoal = _getMoveRingGoal();
+        moveRingValue = 450;
+        moveRingGoal = 500;
+        exerciseRingValue = 15;
+        if (MainManager.Instance != null)
+        {
+            moveRingValue = MainManager.Instance.healthManager.GetMoveRing();
+            moveRingGoal = MainManager.Instance.healthManager.GetMoveGoal();
+            exerciseRingValue = MainManager.Instance.healthManager.GetExerciseRing();
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        moveRing = _getCurrentMoveRingValue();
-        exerciseRing = _getCurrentExerciseRingValue();
-        moveGoal = _getMoveRingGoal();
-        healthText.text = $"MoveRing: {moveRing}\nExerciseRing: {exerciseRing}\nGoal: {moveGoal}";
-    }
-
-    public void NextScene()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        if (MainManager.Instance != null)
+        {
+            moveRingValue = MainManager.Instance.healthManager.GetMoveRing();
+            moveRingGoal = MainManager.Instance.healthManager.GetMoveGoal();
+            exerciseRingValue = MainManager.Instance.healthManager.GetExerciseRing();
+        }
+        progressText.text = $"{(int)(moveRingValue / moveRingGoal)}%";
+        moveRing.fillAmount = (float)(moveRingValue / moveRingGoal);
+        exerciseRing.fillAmount = (float)(exerciseRingValue / 30);
     }
 }

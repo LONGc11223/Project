@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Firebase;
 using Firebase.Auth;
-using Firebase.Firestore;
+// using Firebase.Firestore;
 using UnityEngine.SceneManagement;
 using Firebase.Firestore;
 using Firebase.Extensions;
@@ -75,17 +75,20 @@ namespace Managers
         public IEnumerator SignUp(string email, string password)
         {
             // TODO: add checks beforehand to see if they entered valid info
-
+            Debug.Log("A!");
             var signupTask = auth.CreateUserWithEmailAndPasswordAsync(email, password);
 
             // Wait until user is created
             yield return new WaitUntil(predicate: () => signupTask.IsCompleted);
+
+            Debug.Log("B!");
 
             if (signupTask.Exception == null)
             {
                 user = signupTask.Result;
                 if (user != null)
                 {
+                    Debug.Log("Attempting to create new data!");
                     // Do database thing here
                     DocumentReference docRef = db.Collection("UserData").Document(user.UserId);
                     Dictionary<string, object> initialData = new Dictionary<string, object>
@@ -103,6 +106,12 @@ namespace Managers
                                     { "Mood", "Neutral" },
                                     { "PetAppearance", "GoldenRetriever" },
                                 }
+                            },
+                            { "Inventory", new Dictionary<string, object>
+                                {
+                                    { "Environments", new List<object>() { "Original" }},
+                                    { "Pets", new List<object>() { "GoldenRetriever" }}
+                                }
                             }
                     };
                     docRef.SetAsync(initialData).ContinueWithOnMainThread(task => {
@@ -110,7 +119,58 @@ namespace Managers
                     });
                 }
             }
+            Debug.Log("C!");
+        }
 
+        public void SignUpAlt(string email, string password)
+        {
+            auth.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWith(task => {
+            if (task.IsCanceled) {
+                Debug.LogError("CreateUserWithEmailAndPasswordAsync was canceled.");
+                return;
+            }
+            if (task.IsFaulted) {
+                Debug.LogError("CreateUserWithEmailAndPasswordAsync encountered an error: " + task.Exception);
+                return;
+            }
+
+            // Firebase user has been created.
+            user = task.Result;
+            // Debug.LogFormat("Firebase user created successfully: {0} ({1})",
+            //     user.DisplayName, newUser.UserId);
+            Debug.Log("User Created!");
+            
+            Debug.Log("Attempting to create new data!");
+            // Do database thing here
+            DocumentReference docRef = db.Collection("UserData").Document(user.UserId);
+            Dictionary<string, object> initialData = new Dictionary<string, object>
+            {
+                    { "Currency", 0 },
+                    { "Environment", "Original" },
+                    { "HealthData", new Dictionary<string, object>
+                        {
+                            { "CaloriesBurned", 0 },
+                            { "ExerciseMinutes", 0 },
+                        }
+                    },
+                    { "PetData", new Dictionary<string, object>
+                        {
+                            { "Mood", "Neutral" },
+                            { "PetAppearance", "GoldenRetriever" },
+                        }
+                    },
+                    { "Inventory", new Dictionary<string, object>
+                        {
+                            { "Environments", new List<object>() { "Original" }},
+                            { "Pets", new List<object>() { "GoldenRetriever" }}
+                        }
+                    }
+            };
+            docRef.SetAsync(initialData).ContinueWithOnMainThread(task => {
+                    Debug.Log("User's save data created!.");
+            });
+
+            });
         }
 
         public IEnumerator Login(string email, string password)
@@ -130,6 +190,7 @@ namespace Managers
 
         public void SignOut()
         {
+            MainManager.Instance.databaseManager.StopListening();
             auth.SignOut();
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
         }

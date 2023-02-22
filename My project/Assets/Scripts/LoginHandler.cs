@@ -34,9 +34,11 @@ public class LoginHandler : MonoBehaviour
 
         if (password == confirmPassword)
         {
+            Debug.Log("Signup Success!");
             AuthManager auth = MainManager.Instance.authManager;
 
-            StartCoroutine(auth.SignUp(email, password));
+            // StartCoroutine(auth.SignUp(email, password));
+            auth.SignUpAlt(email, password);
         }
         else
         {
