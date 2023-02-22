@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using System.Linq;
 using Managers;
 using TMPro;
 
@@ -16,7 +17,9 @@ public class DataHandler : MonoBehaviour
     // public List<GameObject> environments;
     [Header("Shop Fields")]
     public TextMeshProUGUI shopCurrencyText;
-    public List<Button> items;
+    // public List<Button> items;
+    public List<PetButton> petItems;
+    public List<EnvironmentButton> environmentItems;
 
 
     // Start is called before the first frame update
@@ -39,14 +42,52 @@ public class DataHandler : MonoBehaviour
         // {
         //     SetPetCosmetics();
         // }
-
+        
         if (MainManager.Instance.databaseManager.currentUserData != null)
         {
             Dictionary<string, object> userData = MainManager.Instance.databaseManager.currentUserData;
+
             var currency = userData["Currency"];
             shopCurrencyText.text = $"{currency}";
+            
+            foreach (PetButton item in petItems)
+            {
+                if (MainManager.Instance.databaseManager.unlockedPets.Contains(item.itemID))
+                {
+                    //Debug.Log($"User has this unlocked: {item.itemID}");
+                    item.setButton.SetActive(true);
+                }
+            }
+
+            foreach (EnvironmentButton item in environmentItems)
+            {
+                if (MainManager.Instance.databaseManager.unlockedEnvironments.Contains(item.itemID))
+                {
+                    //Debug.Log($"User has this unlocked: {item.itemID}");
+                    item.setButton.SetActive(true);
+                }
+            }
         }
         
+    }
+
+    public void PurchaseButton(GameObject button)
+    {
+        if (button.GetComponent<PetButton>() != null)
+        {
+            PetButton item = button.GetComponent<PetButton>();
+            string id = item.itemID;
+            int cost = item.cost;
+            MainManager.Instance.databaseManager.PurchaseItem(id, cost, 0);
+        }
+        else if (button.GetComponent<EnvironmentButton>() != null)
+        {
+            EnvironmentButton item = button.GetComponent<EnvironmentButton>();
+            string id = item.itemID;
+            int cost = item.cost;
+            MainManager.Instance.databaseManager.PurchaseItem(id, cost, 1);
+        }
+        // MainManager.Instance.databaseManager.PurchaseItem(idx, cost);
     }
 
     // void SetPetCosmetics()

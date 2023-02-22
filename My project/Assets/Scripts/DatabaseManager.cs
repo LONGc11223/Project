@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Firebase.Database;
 using Firebase.Firestore;
@@ -12,6 +14,9 @@ namespace Managers
         DocumentReference db_ref;
         ListenerRegistration listener;
         public Dictionary<string, object> currentUserData;
+        public Dictionary<string, object> inventory;
+        public List<string> unlockedPets;
+        public List<string> unlockedEnvironments;
         void Start()
         {
             // db = FirebaseFirestore.DefaultInstance;
@@ -39,7 +44,28 @@ namespace Managers
                 currentUserData = userData;
                 foreach (KeyValuePair<string, object> pair in userData) {
                     Debug.Log($"{pair.Key}: {pair.Value}");
+                    if (pair.Key == "Inventory")
+                    {
+                        inventory = (Dictionary<string,object>)pair.Value;
+                    }
                 }
+
+
+                List<object> pets = (List<object>)inventory["Pets"];
+                foreach (object item in pets) {
+                    if (!unlockedPets.Contains(item.ToString())) {
+                        unlockedPets.Add(item.ToString());
+                    }
+                }
+                
+                List<object> environments = (List<object>)inventory["Environments"];
+                foreach (object item in environments) {
+                    // Debug.Log($"TEST: {item}");
+                    if (!unlockedEnvironments.Contains(item.ToString())) {
+                        unlockedEnvironments.Add(item.ToString());
+                    }
+                }
+
             });
         }
 
@@ -62,8 +88,33 @@ namespace Managers
             db_ref.UpdateAsync(data);
         }
 
-        public void PurchaseItem()
+        public void PurchaseItem(string itemID, int cost, int type)
         {
+            if (Convert.ToInt32(MainManager.Instance.databaseManager.currentUserData["Currency"]) > cost)
+            {
+                DocumentReference docRef = db.Collection("UserData").Document(MainManager.Instance.authManager.user.UserId);
+
+                if (type == 0)
+                {
+                    unlockedPets.Add(itemID);
+                } 
+                else if (type == 1)
+                {
+                    unlockedEnvironments.Add(itemID);
+                }
+
+                Dictionary<string, object> updateData = new Dictionary<string, object>
+                {
+                        { "Currency", Convert.ToInt32(MainManager.Instance.databaseManager.currentUserData["Currency"]) - cost },
+                        { "Inventory", new Dictionary<string, object>
+                            {
+                                { "Environments", unlockedEnvironments},
+                                { "Pets", unlockedPets}
+                            }
+                        }
+                };
+                docRef.UpdateAsync(updateData);
+            }
             
         }
 

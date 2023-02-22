@@ -90,4 +90,36 @@ public class EnvironmentHandler : MonoBehaviour
             currentEnvironment = activeEnvironment;
         }
     }
+
+    public void SetPet(int idx)
+    {
+        switch(idx)
+        {
+            case 0:
+                activePet = ActivePet.GoldenRetriever;
+                break;
+            case 1:
+                activePet = ActivePet.Chihuahua;
+                break;
+            case 2:
+                activePet = ActivePet.GreatDane;
+                break;
+        }
+    }
+
+    public void SetEnv(int idx)
+    {
+        switch(idx)
+        {
+            case 0:
+                activeEnvironment = ActiveEnvironment.Original;
+                break;
+            case 1:
+                activeEnvironment = ActiveEnvironment.Bamboo;
+                break;
+            case 2:
+                activeEnvironment = ActiveEnvironment.Forest;
+                break;
+        }
+    }
 }
