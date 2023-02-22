@@ -8,7 +8,7 @@ namespace Managers
     public class HealthManager : MonoBehaviour
     {
         [DllImport("__Internal")]
-        private static extern double _requestAuthorization();
+        private static extern void _requestAuthorization();
 
         [DllImport("__Internal")]
         private static extern double _getCurrentMoveRingValue();
@@ -16,8 +16,12 @@ namespace Managers
         [DllImport("__Internal")]
         private static extern double _getCurrentExerciseRingValue();
 
+        [DllImport("__Internal")]
+        private static extern double _getMoveRingGoal();
+
         public double moveRing;
         public double exerciseRing;
+        public double moveGoal;
 
         // Start is called before the first frame update
         void Start()
@@ -25,6 +29,7 @@ namespace Managers
             _requestAuthorization();
             moveRing = _getCurrentMoveRingValue();
             exerciseRing = _getCurrentExerciseRingValue();
+            moveGoal = _getMoveRingGoal();
         }
 
         // Update is called once per frame
@@ -32,6 +37,7 @@ namespace Managers
         {
             moveRing = _getCurrentMoveRingValue();
             exerciseRing = _getCurrentExerciseRingValue();
+            moveGoal = _getMoveRingGoal();
         }
     }
 }

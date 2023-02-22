@@ -414,6 +414,7 @@ GameObject:
   - component: {fileID: 220897213}
   - component: {fileID: 220897212}
   - component: {fileID: 220897215}
+  - component: {fileID: 220897216}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -448,6 +449,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   authManager: {fileID: 0}
   databaseManager: {fileID: 0}
+  healthManager: {fileID: 0}
   setup: 0
 --- !u!4 &220897214
 Transform:
@@ -476,6 +478,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df8f283cd90974ea1bcdd5d2bc25b0c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &220897216
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 220897211}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fee6a6fb26e9840bcad8d18acea6491f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveRing: 0
+  exerciseRing: 0
+  moveGoal: 0
 --- !u!1 &355185391
 GameObject:
   m_ObjectHideFlags: 0

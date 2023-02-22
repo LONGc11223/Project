@@ -9,6 +9,7 @@ namespace Managers
         public static MainManager Instance;
         public AuthManager authManager;
         public DatabaseManager databaseManager;
+        public HealthManager healthManager;
         [HideInInspector] public bool setup;
 
         void Awake()
@@ -17,6 +18,7 @@ namespace Managers
 
             authManager = GetComponent<AuthManager>();
             databaseManager = GetComponent<DatabaseManager>();
+            healthManager = GetComponent<HealthManager>();
             setup = true;
         }
     }
