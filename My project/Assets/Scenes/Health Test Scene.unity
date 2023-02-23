@@ -474,8 +474,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: HealthHandler, Assembly-CSharp
+      - m_Target: {fileID: 990199479}
+        m_TargetAssemblyTypeName: HealthHandlerDebug, Assembly-CSharp
         m_MethodName: NextScene
         m_Mode: 1
         m_Arguments:

@@ -10,10 +10,13 @@ public class HealthHandler : MonoBehaviour
     public Image moveRing;
     public Image exerciseRing;
     public TextMeshProUGUI progressText;
+    public TextMeshProUGUI debugText;
 
     double moveRingValue;
     double moveRingGoal;
     double exerciseRingValue;
+    bool moveRewardToday;
+    bool exerciseRewardToday;
     
     // Start is called before the first frame update
     void Start()
@@ -21,7 +24,7 @@ public class HealthHandler : MonoBehaviour
         moveRingValue = 450;
         moveRingGoal = 500;
         exerciseRingValue = 15;
-        if (MainManager.Instance != null)
+        if (true)
         {
             moveRingValue = MainManager.Instance.healthManager.GetMoveRing();
             moveRingGoal = MainManager.Instance.healthManager.GetMoveGoal();
@@ -32,7 +35,7 @@ public class HealthHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (MainManager.Instance != null)
+        if (true)
         {
             moveRingValue = MainManager.Instance.healthManager.GetMoveRing();
             moveRingGoal = MainManager.Instance.healthManager.GetMoveGoal();
@@ -41,5 +44,19 @@ public class HealthHandler : MonoBehaviour
         progressText.text = $"{(int)(moveRingValue / moveRingGoal)}%";
         moveRing.fillAmount = (float)(moveRingValue / moveRingGoal);
         exerciseRing.fillAmount = (float)(exerciseRingValue / 30);
+
+        debugText.text = $"MoveRing: {moveRing}\nExerciseRing: {exerciseRing}\nGoal: {moveRingGoal}";
+
+        if (!exerciseRewardToday && exerciseRingValue >= 30.0)
+        {
+            exerciseRewardToday = true;
+            MainManager.Instance.databaseManager.AddFunds(100);
+        }
+
+        if (!moveRewardToday && (moveRingValue / moveRingGoal) >= 1.0)
+        {
+            moveRewardToday = true;
+            MainManager.Instance.databaseManager.AddFunds(50);
+        }
     }
 }

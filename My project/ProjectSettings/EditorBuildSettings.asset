@@ -5,7 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Health Test Scene.unity
     guid: 83d387dc8a7b54601bc43a78a0519120
   - enabled: 1

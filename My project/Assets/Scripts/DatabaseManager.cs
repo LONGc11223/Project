@@ -118,6 +118,16 @@ namespace Managers
             
         }
 
+        public void AddFunds(int amount)
+        {
+            DocumentReference docRef = db.Collection("UserData").Document(MainManager.Instance.authManager.user.UserId);
+            Dictionary<string, object> updateData = new Dictionary<string, object>
+            {
+                    { "Currency", Convert.ToInt32(MainManager.Instance.databaseManager.currentUserData["Currency"]) + amount },
+            };
+            docRef.UpdateAsync(updateData);
+        }
+
     }
 }
 
