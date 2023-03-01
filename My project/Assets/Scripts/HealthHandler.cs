@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
@@ -7,6 +8,7 @@ using TMPro;
 
 public class HealthHandler : MonoBehaviour
 {
+    public bool debug;
     public Image moveRing;
     public Image exerciseRing;
     public TextMeshProUGUI progressText;
@@ -24,7 +26,7 @@ public class HealthHandler : MonoBehaviour
         moveRingValue = 450;
         moveRingGoal = 500;
         exerciseRingValue = 15;
-        if (true)
+        if (!debug)
         {
             moveRingValue = MainManager.Instance.healthManager.GetMoveRing();
             moveRingGoal = MainManager.Instance.healthManager.GetMoveGoal();
@@ -35,13 +37,17 @@ public class HealthHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (true)
+        if (!debug)
         {
             moveRingValue = MainManager.Instance.healthManager.GetMoveRing();
             moveRingGoal = MainManager.Instance.healthManager.GetMoveGoal();
             exerciseRingValue = MainManager.Instance.healthManager.GetExerciseRing();
         }
-        progressText.text = $"{(int)(moveRingValue / moveRingGoal)}%";
+        if (moveRingGoal < 200)
+        {
+            moveRingGoal = 200;
+        }
+        progressText.text = $"{Convert.ToInt32(moveRingValue / (double)moveRingGoal)}%";
         moveRing.fillAmount = (float)(moveRingValue / moveRingGoal);
         exerciseRing.fillAmount = (float)(exerciseRingValue / 30);
 
