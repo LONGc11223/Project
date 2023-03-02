@@ -43,15 +43,15 @@ public class HealthHandler : MonoBehaviour
             moveRingGoal = MainManager.Instance.healthManager.GetMoveGoal();
             exerciseRingValue = MainManager.Instance.healthManager.GetExerciseRing();
         }
-        if (moveRingGoal < 200)
+        if (moveRingGoal < 250)
         {
-            moveRingGoal = 200;
+            moveRingGoal = 250;
         }
         progressText.text = $"{Convert.ToInt32(moveRingValue / (double)moveRingGoal)}%";
         moveRing.fillAmount = (float)(moveRingValue / moveRingGoal);
         exerciseRing.fillAmount = (float)(exerciseRingValue / 30);
 
-        debugText.text = $"MoveRing: {moveRing}\nExerciseRing: {exerciseRing}\nGoal: {moveRingGoal}";
+        debugText.text = $"Move - {moveRing}\nExercise - {exerciseRing}\nGoal - {moveRingGoal}";
 
         if (!exerciseRewardToday && exerciseRingValue >= 30.0)
         {
