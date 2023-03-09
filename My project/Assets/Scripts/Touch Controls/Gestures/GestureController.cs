@@ -105,7 +105,6 @@ namespace InputSamples.Gestures
 
         private void OnDragged(PointerInput input, double time)
         {
-            Debug.Log("test");
             if (!activeGestures.TryGetValue(input.InputId, out var existingGesture))
             {
                 // Probably caught by UI, or the input was otherwise lost
