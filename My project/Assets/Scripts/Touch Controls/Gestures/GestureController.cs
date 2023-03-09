@@ -137,7 +137,7 @@ namespace InputSamples.Gestures
                 var heading = existingGesture.EndPosition - existingGesture.StartPosition;
                 var distance = heading.magnitude;
                 var direction = heading / distance;
-                Debug.Log($"Swiped: {direction}");
+                // Debug.Log($"Swiped: {direction}");
                 Swiped?.Invoke(new SwipeInput(existingGesture));
             }
 

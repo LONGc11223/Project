@@ -1,11 +1,14 @@
-using System.Collections;
 using System.Collections.Generic;
+using InputSamples.Gestures;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
 public class InfoScreenHandler : MonoBehaviour
 {
+    [SerializeField]
+    private GestureController gestureController;
+
     public int currentPage;
     public TextMeshProUGUI textDisplay;
     public Image smallImage;
@@ -19,6 +22,32 @@ public class InfoScreenHandler : MonoBehaviour
     void Start()
     {
         UpdatePage();
+    }
+
+    private void OnEnable()
+    {
+        // gestureController.PotentiallySwiped += OnDragged;
+        gestureController.Swiped += OnSwiped;
+        // gestureController.Pressed += OnPressed;
+    }
+
+    protected virtual void OnDisable()
+    {
+        // gestureController.PotentiallySwiped -= OnDragged;
+        gestureController.Swiped -= OnSwiped;
+        // gestureController.Pressed -= OnPressed;
+    }
+
+    private void OnSwiped(SwipeInput input)
+    {
+        if (input.SwipeDirection.x < -0.75f)
+        {
+            NextPage();
+        } 
+        else if (input.SwipeDirection.x > 0.75f)
+        {
+            PrevPage();
+        }
     }
 
     void UpdatePage()
