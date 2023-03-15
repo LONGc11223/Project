@@ -20,6 +20,7 @@ public class DataHandler : MonoBehaviour
     // public List<Button> items;
     public List<PetButton> petItems;
     public List<EnvironmentButton> environmentItems;
+    public bool debug;
 
 
     // Start is called before the first frame update
@@ -28,7 +29,7 @@ public class DataHandler : MonoBehaviour
         // SetPetCosmetics();
         // lastColor = color;
         Debug.Log("Yes");
-        if (true)
+        if (!debug)
         {
             Debug.Log("About to try loading data");
             MainManager.Instance.databaseManager.LoadUserData();
@@ -43,7 +44,7 @@ public class DataHandler : MonoBehaviour
         //     SetPetCosmetics();
         // }
         
-        if (MainManager.Instance.databaseManager.currentUserData != null)
+        if (!debug && MainManager.Instance.databaseManager.currentUserData != null)
         {
             Dictionary<string, object> userData = MainManager.Instance.databaseManager.currentUserData;
 

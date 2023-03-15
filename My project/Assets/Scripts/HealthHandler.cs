@@ -26,6 +26,7 @@ public class HealthHandler : MonoBehaviour
     double exerciseRingValue;
     bool moveRewardToday;
     bool exerciseRewardToday;
+    HealthManager.RingValues rings;
     
     // Start is called before the first frame update
     void Start()
@@ -38,10 +39,10 @@ public class HealthHandler : MonoBehaviour
             moveRingValue = MainManager.Instance.healthManager.GetMoveRing();
             moveRingGoal = MainManager.Instance.healthManager.GetMoveGoal();
             exerciseRingValue = MainManager.Instance.healthManager.GetExerciseRing();
+            StartCoroutine(MainManager.Instance.healthManager.GetRingData(11, 3, 2023, OnMoveRingReceived, OnExerciseRingReceived));
         }
-        // calendarPanel.GetComponent<RectTransform>().SetLeft(Screen.width);
-        // calendarPanel.GetComponent<RectTransform>().SetRight(-Screen.width);
-        calendarPanel.GetComponent<RectTransform>().anchoredPosition = new Vector3(Screen.width,0,0);
+        // Debug.Log(Screen.width);
+        // calendarPanel.GetComponent<RectTransform>().anchoredPosition = new Vector2(Screen.width,0);
     }
 
     // Update is called once per frame
@@ -53,6 +54,7 @@ public class HealthHandler : MonoBehaviour
             moveRingValue = MainManager.Instance.healthManager.GetMoveRing();
             moveRingGoal = MainManager.Instance.healthManager.GetMoveGoal();
             exerciseRingValue = MainManager.Instance.healthManager.GetExerciseRing();
+            // StartCoroutine(MainManager.Instance.healthManager.GetRingData(11, 3, 2023, OnMoveRingReceived, OnExerciseRingReceived));
         }
         if (moveRingGoal < 250)
         {
@@ -62,7 +64,7 @@ public class HealthHandler : MonoBehaviour
         moveRing.fillAmount = (float)(moveRingValue / moveRingGoal);
         exerciseRing.fillAmount = (float)(exerciseRingValue / 30);
 
-        debugText.text = $"Move - {moveRing}\nExercise - {exerciseRing}\nGoal - {moveRingGoal}";
+        debugText.text = $"Move - {moveRingValue}\nExercise - {exerciseRingValue}\nGoal - {moveRingGoal}\n\nMarch 11, 2023:\n{rings.moveRingValue}\n{rings.exerciseRingValue}";
 
         if (!exerciseRewardToday && exerciseRingValue >= 30.0)
         {
@@ -75,6 +77,18 @@ public class HealthHandler : MonoBehaviour
             moveRewardToday = true;
             MainManager.Instance.databaseManager.AddFunds(50);
         }
+    }
+
+    void OnMoveRingReceived(double moveRingValue)
+    {
+        Debug.Log("Move ring value: " + moveRingValue);
+        rings.moveRingValue = moveRingValue;
+    }
+
+    void OnExerciseRingReceived(double exerciseRingValue)
+    {
+        Debug.Log("Move ring value: " + exerciseRingValue);
+        rings.exerciseRingValue = exerciseRingValue;
     }
 
     private void OnEnable()
@@ -112,6 +126,20 @@ public class HealthHandler : MonoBehaviour
             currentPage++;
         }
     }
+
+    // IEnumerator NextPageAnim(RectTransform page, Vector2 newPosition, float duration)
+    // {
+    //     float counter = 0;
+    //     while (counter < duration)
+    //     {
+    //         counter += Time.deltaTime;
+    //         Vector2 currentPos = page.position;
+
+    //         float time = Vector2.Distance(currentPos, newPosition) / (duration - counter) * Time.deltaTime;
+    //         page.position = Vector2.MoveTowards(currentPos, newPosition, time);
+    //         yield return null;
+    //     }
+    // }
 
     public void PrevPage()
     {

@@ -18,6 +18,7 @@ import HealthKit
     private let exerciseTimeType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.appleExerciseTime)!
     
     private var moveRingValue: Double = 0.0
+    // private var standRingValue: Double = 0.0
     private var exerciseRingValue: Double = 0.0
     private var moveGoalValue: Double = 0.0
     
@@ -91,27 +92,87 @@ import HealthKit
         return moveGoalValue
     }
 
-    // @objc public func getMoveRingGoal() -> Double {
-    //     let activitySummaryType = HKObjectType.activitySummaryType()
+    @objc public func getMoveRingForDay(day: Int, month: Int, year: Int, completion: @escaping (Double) -> Void) {
+        let calendar = Calendar.current
+        let components = DateComponents(year: year, month: month, day: day)
+        let startOfDay = calendar.startOfDay(for: calendar.date(from: components)!)
+        let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
         
-    //     let query = HKActivitySummaryQuery.init(predicate: nil) { (query, summaries, error) in
-    //         if let error = error {
-    //             print("Error getting activity summary: \(error.localizedDescription)")
-    //             return
+        guard let sampleType = HKSampleType.quantityType(forIdentifier: .activeEnergyBurned) else { return }
+        let predicate = HKQuery.predicateForSamples(withStart: startOfDay, end: endOfDay, options: .strictEndDate)
+        let query = HKStatisticsQuery(quantityType: sampleType, quantitySamplePredicate: predicate, options: .cumulativeSum) { _, result, _ in
+            if let sum = result?.sumQuantity() {
+                let moveRingValue = sum.doubleValue(for: HKUnit.jouleUnit(with: .kilo)) * 0.239
+                completion(moveRingValue)
+            } else {
+                completion(0)
+            }
+        }
+        healthStore.execute(query)
+//        return moveRingValue
+    }
+    
+    @objc public func getExerciseRingForDay(day: Int, month: Int, year: Int, completion: @escaping (Double) -> Void) {
+        let calendar = Calendar.current
+        let components = DateComponents(year: year, month: month, day: day)
+        let startOfDay = calendar.startOfDay(for: calendar.date(from: components)!)
+        let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
+        
+        guard let sampleType = HKSampleType.quantityType(forIdentifier: .appleExerciseTime) else { return }
+        let predicate = HKQuery.predicateForSamples(withStart: startOfDay, end: endOfDay, options: .strictEndDate)
+        let query = HKStatisticsQuery(quantityType: sampleType, quantitySamplePredicate: predicate, options: .cumulativeSum) { _, result, _ in
+            if let sum = result?.sumQuantity() {
+                let exerciseRingValue = sum.doubleValue(for: HKUnit.minute())
+                completion(exerciseRingValue)
+            } else {
+                completion(0)
+            }
+        }
+        healthStore.execute(query)
+//        return exerciseRingValue
+    }
+
+    // @objc public func getRingDataForDate(day: Int, month: Int, year: Int) -> [NSNumber] {
+    //     let calendar = Calendar.current;
+    //     var dateComponents = DateComponents()
+    //     dateComponents.year = year
+    //     dateComponents.month = month
+    //     dateComponents.day = day
+    //     let date = calendar.date(from: dateComponents)!
+        
+    //     let activeEnergyBurnedType = HKSampleType.quantityType(forIdentifier: .activeEnergyBurned)!
+    //     let standHoursType = HKCategoryType.categoryType(forIdentifier: .appleStandHour)!
+    //     let exerciseMinutesType = HKQuantityType.quantityType(forIdentifier: .appleExerciseTime)!
+        
+    //     let startDate = Calendar.current.startOfDay(for: date)
+    //     let endDate = Calendar.current.date(byAdding: .day, value: 1, to: startDate)!
+        
+    //     let activeEnergyBurnedPredicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: .strictEndDate)
+    //     let standHoursPredicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: .strictEndDate)
+    //     let exerciseMinutesPredicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: .strictEndDate)
+        
+    //     let moveQuery = HKStatisticsQuery(quantityType: activeEnergyBurnedType, quantitySamplePredicate: activeEnergyBurnedPredicate, options: .cumulativeSum) { _, result, _ in
+    //         if let sum = result?.sumQuantity() {
+    //             self.moveRingValue = sum.doubleValue(for: HKUnit.jouleUnit(with: .kilo)) * 0.239
     //         }
+    //     }
             
-    //         guard let summaries = summaries, summaries.count > 0 else {
-    //             print("No activity summaries found")
-    //             return
+    //     let standQuery = HKActivitySummaryQuery(predicate: standHoursPredicate) { (query, summaries, error) in
+    //         if let summary = summaries?.first {
+    //             self.standRingValue = summary.appleStandHours.doubleValue(for: HKUnit.count())
     //         }
-            
-    //         let moveGoal = summaries[0].activeEnergyBurnedGoal.doubleValue(for: HKUnit.kilocalorie())
-    //         self.moveGoalValue = moveGoal
-    //         print("Move ring goal: \(String(describing: moveGoal))")
     //     }
         
-    //     healthStore.execute(query)
+    //     let exerciseQuery = HKStatisticsQuery(quantityType: exerciseMinutesType, quantitySamplePredicate: exerciseMinutesPredicate, options: .cumulativeSum) { _, result, _ in
+    //         if let sum = result?.sumQuantity() {
+    //             self.exerciseRingValue = sum.doubleValue(for: HKUnit.minute())
+    //         }
+    //     }
         
-    //     return moveGoalValue
+    //     healthStore.execute(moveQuery)
+    //     healthStore.execute(standQuery)
+    //     healthStore.execute(exerciseQuery)
+        
+    //     return [NSNumber(value: moveRingValue), NSNumber(value: exerciseRingValue), NSNumber(value: standRingValue)]
     // }
 }

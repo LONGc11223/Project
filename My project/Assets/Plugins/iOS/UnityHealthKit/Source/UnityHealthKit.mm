@@ -31,4 +31,36 @@ extern "C" {
         return result;
     }
 
+    void _getMoveRingForDay(int day, int month, int year, void(*callback)(double)) {
+        [[UnityHealthKit shared] getMoveRingForDayWithDay:day month:month year:year completion:^(double value) {
+            callback(value);
+        }];
+    }
+
+    void _getExerciseRingForDay(int day, int month, int year, void(*callback)(double)) {
+        [[UnityHealthKit shared] getExerciseRingForDayWithDay:day month:month year:year completion:^(double value) {
+            callback(value);
+        }];
+    }
+
+    // typedef struct {
+    //     double moveRingValue;
+    //     double exerciseRingValue;
+    //     double standHoursValue;
+    // } RingValues;
+
+    // RingValues _getRingDataForDate(int day, int month, int year) {
+    //     NSDateComponents *components = [[NSDateComponents alloc] init];
+    //     components.year = year;
+    //     components.month = month;
+    //     components.day = day;
+    //     NSDate *date = [[NSCalendar currentCalendar] dateFromComponents:components];
+    //     NSArray<NSNumber *> *ringData = [[UnityHealthKit shared] getRingDataForDateWithDay:day month:month year:year];
+    //     double moveRingValue = [ringData[0] doubleValue];
+    //     double exerciseRingValue = [ringData[1] doubleValue];
+    //     double standRingValue = [ringData[2] doubleValue];
+    //     RingValues ringValues = {moveRingValue, exerciseRingValue, standRingValue};
+    //     return ringValues;
+    // }
+
 }
