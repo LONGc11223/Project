@@ -11,6 +11,8 @@ public class HealthHandler : MonoBehaviour
 {
     [SerializeField]
     private GestureController gestureController;
+    public RectTransform dayPage;
+    public RectTransform calendarPage;
     public GameObject dayPanel;
     public GameObject calendarPanel;
     int currentPage = 0;
@@ -42,7 +44,7 @@ public class HealthHandler : MonoBehaviour
             StartCoroutine(MainManager.Instance.healthManager.GetRingData(11, 3, 2023, OnMoveRingReceived, OnExerciseRingReceived));
         }
         // Debug.Log(Screen.width);
-        // calendarPanel.GetComponent<RectTransform>().anchoredPosition = new Vector2(Screen.width,0);
+        calendarPanel.GetComponent<RectTransform>().anchoredPosition = new Vector2(Screen.width,0);
     }
 
     // Update is called once per frame
@@ -121,25 +123,26 @@ public class HealthHandler : MonoBehaviour
     {
         if (currentPage == 0)
         {
-            dayPanel.SetActive(false);
-            calendarPanel.SetActive(true);
+            // dayPanel.SetActive(false);
+            // calendarPanel.SetActive(true);
+            StartCoroutine(NextPageAnim(calendarPage, Vector2.zero, 0.5f));
             currentPage++;
         }
     }
 
-    // IEnumerator NextPageAnim(RectTransform page, Vector2 newPosition, float duration)
-    // {
-    //     float counter = 0;
-    //     while (counter < duration)
-    //     {
-    //         counter += Time.deltaTime;
-    //         Vector2 currentPos = page.position;
+    IEnumerator NextPageAnim(RectTransform page, Vector2 newPosition, float duration)
+    {
+        float counter = 0;
+        while (counter < duration)
+        {
+            counter += Time.deltaTime;
+            Vector2 currentPos = page.position;
 
-    //         float time = Vector2.Distance(currentPos, newPosition) / (duration - counter) * Time.deltaTime;
-    //         page.position = Vector2.MoveTowards(currentPos, newPosition, time);
-    //         yield return null;
-    //     }
-    // }
+            float time = Vector2.Distance(currentPos, newPosition) / (duration - counter) * Time.deltaTime;
+            page.position = Vector2.MoveTowards(currentPos, newPosition, time);
+            yield return null;
+        }
+    }
 
     public void PrevPage()
     {
@@ -147,6 +150,24 @@ public class HealthHandler : MonoBehaviour
         {
             dayPanel.SetActive(true);
             calendarPanel.SetActive(false);
+            currentPage--;
+        }
+    }
+
+    IEnumerator PrevPageAnim(RectTransform page, Vector2 newPosition, float duration)
+    {
+        if (currentPage == 1)
+        {
+            float counter = 0;
+            while (counter < duration)
+            {
+                counter += Time.deltaTime;
+                Vector2 currentPos = page.position;
+
+                float time = Vector2.Distance(currentPos, newPosition) / (duration - counter) * Time.deltaTime;
+                page.position = Vector2.MoveTowards(currentPos, newPosition, time);
+                yield return null;
+            }
             currentPage--;
         }
     }
