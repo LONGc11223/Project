@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>801220637517-6jb67plgi1ppbh3r5fht68f63s3sbsmk.apps.googleusercontent.com</string>
+	<string>801220637517-f0h9j4mpcj0aigbqbi3tgjek9a8us0i0.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.801220637517-6jb67plgi1ppbh3r5fht68f63s3sbsmk</string>
+	<string>com.googleusercontent.apps.801220637517-f0h9j4mpcj0aigbqbi3tgjek9a8us0i0</string>
 	<key>API_KEY</key>
 	<string>AIzaSyCxEATUkw58i_OVDkperPz0Ya77C6WhnLM</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.long.healthpet</string>
+	<string>com.long.project</string>
 	<key>PROJECT_ID</key>
 	<string>project-b9641</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,7 +29,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:801220637517:ios:612a0c3ca00f3b58017d04</string>
+	<string>1:801220637517:ios:c805f663ca516a57017d04</string>
 	<key>DATABASE_URL</key>
 	<string>https://project-b9641-default-rtdb.firebaseio.com</string>
 </dict>

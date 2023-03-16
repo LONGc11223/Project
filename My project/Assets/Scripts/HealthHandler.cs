@@ -13,8 +13,8 @@ public class HealthHandler : MonoBehaviour
     private GestureController gestureController;
     public RectTransform dayPage;
     public RectTransform calendarPage;
-    public GameObject dayPanel;
-    public GameObject calendarPanel;
+    // public GameObject dayPanel;
+    // public GameObject calendarPanel;
     int currentPage = 0;
 
     public bool debug;
@@ -29,6 +29,7 @@ public class HealthHandler : MonoBehaviour
     bool moveRewardToday;
     bool exerciseRewardToday;
     HealthManager.RingValues rings;
+    bool canSwipe = true;
     
     // Start is called before the first frame update
     void Start()
@@ -44,7 +45,7 @@ public class HealthHandler : MonoBehaviour
             StartCoroutine(MainManager.Instance.healthManager.GetRingData(11, 3, 2023, OnMoveRingReceived, OnExerciseRingReceived));
         }
         // Debug.Log(Screen.width);
-        calendarPanel.GetComponent<RectTransform>().anchoredPosition = new Vector2(Screen.width,0);
+        calendarPage.anchoredPosition = new Vector2(Screen.width,0);
     }
 
     // Update is called once per frame
@@ -121,55 +122,67 @@ public class HealthHandler : MonoBehaviour
 
     public void NextPage()
     {
-        if (currentPage == 0)
+        if (currentPage == 0 && canSwipe)
         {
             // dayPanel.SetActive(false);
             // calendarPanel.SetActive(true);
-            StartCoroutine(NextPageAnim(calendarPage, Vector2.zero, 0.5f));
+
+            StartCoroutine(NextPageAnim(calendarPage, new Vector2(dayPage.anchoredPosition.x, dayPage.anchoredPosition.y), 0.1f));
             currentPage++;
         }
     }
 
     IEnumerator NextPageAnim(RectTransform page, Vector2 newPosition, float duration)
     {
+        canSwipe = false;
         float counter = 0;
         while (counter < duration)
         {
             counter += Time.deltaTime;
-            Vector2 currentPos = page.position;
+            Vector2 currentPos = page.anchoredPosition;
+            Vector2 oldPos = dayPage.anchoredPosition;
 
             float time = Vector2.Distance(currentPos, newPosition) / (duration - counter) * Time.deltaTime;
-            page.position = Vector2.MoveTowards(currentPos, newPosition, time);
+            float oldTime = Vector2.Distance(oldPos, new Vector2(-Screen.width, 0)) / (duration - counter) * Time.deltaTime;
+            
+            page.anchoredPosition = Vector2.MoveTowards(currentPos, newPosition, time);
+            dayPage.anchoredPosition = Vector2.MoveTowards(oldPos, new Vector2(-Screen.width, 0), oldTime);
             yield return null;
         }
+        canSwipe = true;
+
     }
 
     public void PrevPage()
     {
-        if (currentPage == 1)
+        if (currentPage == 1 && canSwipe)
         {
-            dayPanel.SetActive(true);
-            calendarPanel.SetActive(false);
+            // dayPanel.SetActive(true);
+            // calendarPanel.SetActive(false);
+
+            StartCoroutine(PrevPageAnim(dayPage, new Vector2(calendarPage.anchoredPosition.x, calendarPage.anchoredPosition.y), 0.1f));            
             currentPage--;
         }
     }
 
     IEnumerator PrevPageAnim(RectTransform page, Vector2 newPosition, float duration)
     {
-        if (currentPage == 1)
+        canSwipe = false;
+        float counter = 0;
+        while (counter < duration)
         {
-            float counter = 0;
-            while (counter < duration)
-            {
-                counter += Time.deltaTime;
-                Vector2 currentPos = page.position;
+            counter += Time.deltaTime;
+            Vector2 currentPos = page.anchoredPosition;
+            Vector2 oldPos = calendarPage.anchoredPosition;
 
-                float time = Vector2.Distance(currentPos, newPosition) / (duration - counter) * Time.deltaTime;
-                page.position = Vector2.MoveTowards(currentPos, newPosition, time);
-                yield return null;
-            }
-            currentPage--;
+            float time = Vector2.Distance(currentPos, newPosition) / (duration - counter) * Time.deltaTime;
+            float oldTime = Vector2.Distance(oldPos, new Vector2(Screen.width, 0)) / (duration - counter) * Time.deltaTime;
+            
+            page.anchoredPosition = Vector2.MoveTowards(currentPos, newPosition, time);
+            calendarPage.anchoredPosition = Vector2.MoveTowards(oldPos, new Vector2(Screen.width, 0), oldTime);
+            yield return null;
         }
+        canSwipe = true;
     }
 
 }

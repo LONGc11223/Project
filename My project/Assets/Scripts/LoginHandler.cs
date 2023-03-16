@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
 using Managers;
 using UnityEngine.SceneManagement;
@@ -18,7 +19,7 @@ public class LoginHandler : MonoBehaviour
 
     void Update()
     {
-        if (AuthManager.active == true && SceneManager.GetActiveScene().buildIndex == 1)
+        if (AuthManager.active == true && SceneManager.GetActiveScene().name == "Login Screen")
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
@@ -61,5 +62,10 @@ public class LoginHandler : MonoBehaviour
         AuthManager auth = MainManager.Instance.authManager;
         Debug.Log("Attempting to login the user!");
         StartCoroutine(auth.Login(email,password));
+    }
+
+    public void GoToInfo()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 2);
     }
 }
