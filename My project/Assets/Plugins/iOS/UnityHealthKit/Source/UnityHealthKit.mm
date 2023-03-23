@@ -35,6 +35,10 @@ extern "C" {
         double result = [[UnityHealthKit shared] getMoveRingValueWithDay:day month:month year:year];
         return result;
     }
+    double _getExerciseRingValue(int day, int month, int year) {
+        double result = [[UnityHealthKit shared] getExcerciseRingValueWithDay:day month:month year:year];
+        return result;
+    }
 
     void _getMoveRingForDay(int day, int month, int year, void(*callback)(double)) {
         [[UnityHealthKit shared] getMoveRingForDayWithDay:day month:month year:year completion:^(double value) {

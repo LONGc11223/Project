@@ -112,6 +112,26 @@ import HealthKit
         print("Move for date: \(moveRingValueForDate)");
         return moveRingValueForDate
     }
+    
+    @objc public func getExerciseRingValue(day: Int, month: Int, year: Int) -> Double {
+        let calendar = Calendar.current
+        let components = DateComponents(year: year, month: month, day: day)
+        let startOfDay = calendar.startOfDay(for: calendar.date(from: components)!)
+        let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
+        Double exerciseRing = 0.0
+        
+        guard let sampleType = HKSampleType.quantityType(forIdentifier: .appleExerciseTime) else { return 0 }
+        let startDate = Calendar.current.startOfDay(for: Date())
+        let predicate = HKQuery.predicateForSamples(withStart: startOfDay, end: endOfDay, options: .strictEndDate)
+        let query = HKStatisticsQuery(quantityType: sampleType, quantitySamplePredicate: predicate, options: .cumulativeSum) { _, result, _ in
+            if let sum = result?.sumQuantity() {
+                exerciseRing = sum.doubleValue(for: HKUnit.minute())
+//                print("Exercise ring value: \(self.exerciseRingValue)")
+            }
+        }
+        healthStore.execute(query)
+        return exerciseRing
+    }
 
      @objc public func getMoveRingForDay(day: Int, month: Int, year: Int, completion: @escaping (Double) -> Void) {
          let calendar = Calendar.current

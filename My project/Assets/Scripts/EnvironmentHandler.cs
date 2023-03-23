@@ -14,7 +14,10 @@ public class EnvironmentHandler : MonoBehaviour
     {
         GoldenRetriever,
         Chihuahua,
-        GreatDane
+        GreatDane,
+        Tiger,
+        Panda,
+        GreyWolf,
     }
     public ActivePet activePet;
     ActivePet currentPet;
@@ -25,7 +28,8 @@ public class EnvironmentHandler : MonoBehaviour
     {
         Original,
         Bamboo,
-        Forest
+        Forest,
+        Field,
     }
     public ActiveEnvironment activeEnvironment;
     ActiveEnvironment currentEnvironment;
@@ -52,6 +56,21 @@ public class EnvironmentHandler : MonoBehaviour
                 case ActivePet.GreatDane:
                     pets[currentPetIdx].SetActive(false);
                     currentPetIdx = 2;
+                    pets[currentPetIdx].SetActive(true);
+                    break;
+                case ActivePet.Tiger:
+                    pets[currentPetIdx].SetActive(false);
+                    currentPetIdx = 3;
+                    pets[currentPetIdx].SetActive(true);
+                    break;
+                case ActivePet.Panda:
+                    pets[currentPetIdx].SetActive(false);
+                    currentPetIdx = 4;
+                    pets[currentPetIdx].SetActive(true);
+                    break;
+                case ActivePet.GreyWolf:
+                    pets[currentPetIdx].SetActive(false);
+                    currentPetIdx = 5;
                     pets[currentPetIdx].SetActive(true);
                     break;
             }
@@ -84,6 +103,14 @@ public class EnvironmentHandler : MonoBehaviour
                     directionalLight.color = new Color(1f, 0.82f, 0.588f, 1f);
                     directionalLight.transform.localEulerAngles = new Vector3(45f,-435f,0f);
                     currentEnvIdx = 2;
+                    environments[currentEnvIdx].SetActive(true);
+                    break;
+                case ActiveEnvironment.Field:
+                    environments[currentEnvIdx].SetActive(false);
+                    mainCamera.backgroundColor = new Color(0.6157f, 0.811f, 0.854f, 1f);
+                    directionalLight.color = new Color(0.8f, 0.85f, 0.898f, 1f);
+                    directionalLight.transform.localEulerAngles = new Vector3(60f,-400f,66f);
+                    currentEnvIdx = 3;
                     environments[currentEnvIdx].SetActive(true);
                     break;
             }

@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
-[ExecuteInEditMode]
+// [ExecuteInEditMode]
 public class Calendar : MonoBehaviour
 {
     public enum Days {
@@ -21,12 +22,17 @@ public class Calendar : MonoBehaviour
     public int currentYear = 2020;
     public TextMeshProUGUI monthText;
     public TextMeshProUGUI yearText;
+    public Button nextButton;
+    // public Button prevButton;
     public GameObject entries;
+    DateTime now;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        monthText.text = MonthToText(currentMonth);
+        yearText.text = $"{currentYear}";
+        now = DateTime.Now;
     }
 
     // Update is called once per frame
@@ -34,13 +40,46 @@ public class Calendar : MonoBehaviour
     {
         int days = DateTime.DaysInMonth(currentYear, currentMonth);
         DateTime referenceDay = new DateTime(currentYear, currentMonth, 1);
-        // Debug.Log(referenceDay.DayOfWeek);
+        int dayOfWeek = (int)referenceDay.DayOfWeek;
+        // Debug.Log($"On {currentMonth}/{currentYear}, the first day starts at {referenceDay.DayOfWeek}");
+        // Debug.Log($"This month starts on the day {dayOfWeek} and has {days} days");
 
+        for (int i = 0; i < 35; i++)
+        {
+            if (i < dayOfWeek || i >= dayOfWeek+days)
+            {
+                entries.transform.GetChild(i).gameObject.GetComponent<DayEntry>().hide = true;
+            }
+            else // valid day
+            {
+                DayEntry day = entries.transform.GetChild(i).gameObject.GetComponent<DayEntry>();
+                day.hide = false;
+                day.dayValue = i - dayOfWeek + 1;
+
+            }
+        }
+
+
+
+        if (now.Year == currentYear && now.Month == currentMonth)
+        {
+            nextButton.interactable = false;
+        }
+        else
+        {
+            nextButton.interactable = true;
+        }
 
     }
 
     public void NextMonth()
     {
+        if (now.Year == currentYear && now.Month == currentMonth)
+        {
+            Debug.Log("You should not be able to go to the next month!");
+            return;
+        }
+
         if (currentMonth == 12) 
         {
             currentMonth = 1;
