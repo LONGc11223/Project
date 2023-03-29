@@ -21,12 +21,17 @@ public class HealthHandlerDebug : MonoBehaviour
 
     [DllImport("__Internal")]
     private static extern double _getMoveRingValue(int day, int month, int year);
+
+    [DllImport("__Internal")]
+    private static extern double _getExerciseRingValue(int day, int month, int year);
+
     public bool debug;
     public double moveRing;
     public double exerciseRing;
     public double moveGoal;
 
     public double targetMove;
+    public double targetExercise;
 
     public TMP_InputField dayInput;
     public TMP_InputField monthInput;
@@ -80,12 +85,13 @@ public class HealthHandlerDebug : MonoBehaviour
             exerciseRing = _getCurrentExerciseRingValue();
             moveGoal = _getMoveRingGoal();
             targetMove = _getMoveRingValue(day, month, year);
+            targetExercise = _getExerciseRingValue(day, month, year);
         }
         
         
         
 
-        healthText.text = $"MoveRing: {moveRing}\nExerciseRing: {exerciseRing}\nGoal: {moveGoal}\n\nOther Date: ";
+        healthText.text = $"MoveRing: {moveRing}\nExerciseRing: {exerciseRing}\nGoal: {moveGoal}\n\nOther Date:\n {targetMove}\n{targetExercise}";
     }
 
     public void NextScene()
