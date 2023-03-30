@@ -90,8 +90,9 @@ namespace Managers
 
         public void PurchaseItem(string itemID, int cost, int type)
         {
-            if (Convert.ToInt32(MainManager.Instance.databaseManager.currentUserData["Currency"]) > cost)
+            if (Convert.ToInt32(MainManager.Instance.databaseManager.currentUserData["Currency"]) >= cost)
             {
+                Debug.Log("User has enough money!");
                 DocumentReference docRef = db.Collection("UserData").Document(MainManager.Instance.authManager.user.UserId);
 
                 if (type == 0)
@@ -114,6 +115,10 @@ namespace Managers
                         }
                 };
                 docRef.UpdateAsync(updateData);
+            }
+            else
+            {
+                Debug.Log("User does not have enough money! ");
             }
             
         }

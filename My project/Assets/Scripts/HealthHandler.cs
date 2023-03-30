@@ -78,7 +78,7 @@ public class HealthHandler : MonoBehaviour
         if (!moveRewardToday && (moveRingValue / moveRingGoal) >= 1.0)
         {
             moveRewardToday = true;
-            MainManager.Instance.databaseManager.AddFunds(50);
+            MainManager.Instance.databaseManager.AddFunds(100 + (Convert.ToInt32(moveRingValue / 100) * 50));
         }
     }
 

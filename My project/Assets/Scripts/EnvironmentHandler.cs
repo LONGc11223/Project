@@ -84,6 +84,7 @@ public class EnvironmentHandler : MonoBehaviour
                 case ActiveEnvironment.Original:
                     environments[currentEnvIdx].SetActive(false);
                     mainCamera.backgroundColor = new Color(1f, 0.980f, 0.831f, 1f);
+                    mainCamera.transform.position = new Vector3(13.02f, 0.4f, -2f);
                     directionalLight.color = new Color(1f, 0.561f, 0.322f, 1f);
                     directionalLight.transform.localEulerAngles = new Vector3(50f,-30f,0f);
                     currentEnvIdx = 0;
@@ -92,6 +93,7 @@ public class EnvironmentHandler : MonoBehaviour
                 case ActiveEnvironment.Bamboo:
                     environments[currentEnvIdx].SetActive(false);
                     mainCamera.backgroundColor = new Color(0.776f, 0.831f, 0.616f, 1f);
+                    mainCamera.transform.position = new Vector3(13.02f, 0.4f, -2f);
                     directionalLight.color = new Color(1f, 0.82f, 0.588f, 1f);
                     directionalLight.transform.localEulerAngles = new Vector3(45f,-435f,0f);
                     currentEnvIdx = 1;
@@ -100,6 +102,7 @@ public class EnvironmentHandler : MonoBehaviour
                 case ActiveEnvironment.Forest:
                     environments[currentEnvIdx].SetActive(false);
                     mainCamera.backgroundColor = new Color(0.576f, 0.655f, 0.702f, 1f);
+                    mainCamera.transform.position = new Vector3(13.02f, 0.4f, -2f);
                     directionalLight.color = new Color(1f, 0.82f, 0.588f, 1f);
                     directionalLight.transform.localEulerAngles = new Vector3(45f,-435f,0f);
                     currentEnvIdx = 2;
@@ -108,6 +111,7 @@ public class EnvironmentHandler : MonoBehaviour
                 case ActiveEnvironment.Field:
                     environments[currentEnvIdx].SetActive(false);
                     mainCamera.backgroundColor = new Color(0.6157f, 0.811f, 0.854f, 1f);
+                    mainCamera.transform.position = new Vector3(13.02f, 0.6f, -2f);
                     directionalLight.color = new Color(0.8f, 0.85f, 0.898f, 1f);
                     directionalLight.transform.localEulerAngles = new Vector3(60f,-400f,66f);
                     currentEnvIdx = 3;
@@ -131,6 +135,15 @@ public class EnvironmentHandler : MonoBehaviour
             case 2:
                 activePet = ActivePet.GreatDane;
                 break;
+            case 3:
+                activePet = ActivePet.Tiger;
+                break;
+            case 4:
+                activePet = ActivePet.GreyWolf;
+                break;
+            case 5:
+                activePet = ActivePet.Panda;
+                break;
         }
     }
 
@@ -146,6 +159,9 @@ public class EnvironmentHandler : MonoBehaviour
                 break;
             case 2:
                 activeEnvironment = ActiveEnvironment.Forest;
+                break;
+            case 3:
+                activeEnvironment = ActiveEnvironment.Field;
                 break;
         }
     }

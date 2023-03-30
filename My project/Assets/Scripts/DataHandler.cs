@@ -43,6 +43,7 @@ public class DataHandler : MonoBehaviour
         // {
         //     SetPetCosmetics();
         // }
+        // Debug.Log(MainManager.Instance.databaseManager.currentUserData);
         
         if (!debug && MainManager.Instance.databaseManager.currentUserData != null)
         {
@@ -76,6 +77,7 @@ public class DataHandler : MonoBehaviour
     {
         if (button.GetComponent<PetButton>() != null)
         {
+            Debug.Log("Attempting to buy a pet!");
             PetButton item = button.GetComponent<PetButton>();
             string id = item.itemID;
             int cost = item.cost;
@@ -83,6 +85,7 @@ public class DataHandler : MonoBehaviour
         }
         else if (button.GetComponent<EnvironmentButton>() != null)
         {
+            Debug.Log("Attempting to buy an environment!");
             EnvironmentButton item = button.GetComponent<EnvironmentButton>();
             string id = item.itemID;
             int cost = item.cost;
