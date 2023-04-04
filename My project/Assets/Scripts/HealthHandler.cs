@@ -30,6 +30,10 @@ public class HealthHandler : MonoBehaviour
     bool exerciseRewardToday;
     HealthManager.RingValues rings;
     bool canSwipe = true;
+
+    Vector2 dailyOrigin;
+    Vector2 calendarOrigin;
+    Vector2 otherOrigin;
     
     // Start is called before the first frame update
     void Start()
@@ -42,10 +46,14 @@ public class HealthHandler : MonoBehaviour
             moveRingValue = MainManager.Instance.healthManager.GetMoveRing();
             moveRingGoal = MainManager.Instance.healthManager.GetMoveGoal();
             exerciseRingValue = MainManager.Instance.healthManager.GetExerciseRing();
-            StartCoroutine(MainManager.Instance.healthManager.GetRingData(11, 3, 2023, OnMoveRingReceived, OnExerciseRingReceived));
+            // StartCoroutine(MainManager.Instance.healthManager.GetRingData(11, 3, 2023, OnMoveRingReceived, OnExerciseRingReceived));
         }
         // Debug.Log(Screen.width);
         calendarPage.anchoredPosition = new Vector2(Screen.width,0);
+
+        dailyOrigin = new Vector2(dayPage.anchoredPosition.x, dayPage.anchoredPosition.y);
+        calendarOrigin = new Vector2(calendarPage.anchoredPosition.x, calendarPage.anchoredPosition.y);
+        otherOrigin = new Vector2(-calendarPage.anchoredPosition.x, calendarPage.anchoredPosition.y);
     }
 
     // Update is called once per frame
@@ -127,7 +135,7 @@ public class HealthHandler : MonoBehaviour
             // dayPanel.SetActive(false);
             // calendarPanel.SetActive(true);
 
-            StartCoroutine(NextPageAnim(calendarPage, new Vector2(dayPage.anchoredPosition.x, dayPage.anchoredPosition.y), 0.1f));
+            StartCoroutine(NextPageAnim(calendarPage, dailyOrigin, 0.1f));
             currentPage++;
         }
     }
@@ -143,10 +151,10 @@ public class HealthHandler : MonoBehaviour
             Vector2 oldPos = dayPage.anchoredPosition;
 
             float time = Vector2.Distance(currentPos, newPosition) / (duration - counter) * Time.deltaTime;
-            float oldTime = Vector2.Distance(oldPos, new Vector2(-Screen.width, 0)) / (duration - counter) * Time.deltaTime;
+            float oldTime = Vector2.Distance(oldPos, otherOrigin) / (duration - counter) * Time.deltaTime;
             
             page.anchoredPosition = Vector2.MoveTowards(currentPos, newPosition, time);
-            dayPage.anchoredPosition = Vector2.MoveTowards(oldPos, new Vector2(-Screen.width, 0), oldTime);
+            dayPage.anchoredPosition = Vector2.MoveTowards(oldPos, otherOrigin, oldTime);
             yield return null;
         }
         canSwipe = true;
@@ -160,7 +168,7 @@ public class HealthHandler : MonoBehaviour
             // dayPanel.SetActive(true);
             // calendarPanel.SetActive(false);
 
-            StartCoroutine(PrevPageAnim(dayPage, new Vector2(calendarPage.anchoredPosition.x, calendarPage.anchoredPosition.y), 0.1f));            
+            StartCoroutine(PrevPageAnim(dayPage, dailyOrigin, 0.1f));            
             currentPage--;
         }
     }
@@ -176,10 +184,10 @@ public class HealthHandler : MonoBehaviour
             Vector2 oldPos = calendarPage.anchoredPosition;
 
             float time = Vector2.Distance(currentPos, newPosition) / (duration - counter) * Time.deltaTime;
-            float oldTime = Vector2.Distance(oldPos, new Vector2(Screen.width, 0)) / (duration - counter) * Time.deltaTime;
+            float oldTime = Vector2.Distance(oldPos, calendarOrigin) / (duration - counter) * Time.deltaTime;
             
             page.anchoredPosition = Vector2.MoveTowards(currentPos, newPosition, time);
-            calendarPage.anchoredPosition = Vector2.MoveTowards(oldPos, new Vector2(Screen.width, 0), oldTime);
+            calendarPage.anchoredPosition = Vector2.MoveTowards(oldPos, calendarOrigin, oldTime);
             yield return null;
         }
         canSwipe = true;

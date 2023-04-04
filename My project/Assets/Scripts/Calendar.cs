@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using Managers;
 using TMPro;
 
 // [ExecuteInEditMode]
@@ -54,8 +55,17 @@ public class Calendar : MonoBehaviour
             {
                 DayEntry day = entries.transform.GetChild(i).gameObject.GetComponent<DayEntry>();
                 day.hide = false;
-                day.dayValue = i - dayOfWeek + 1;
+                int dayNum = i - dayOfWeek + 1;
+                day.dayValue = dayNum;
 
+                if (MainManager.Instance != null)
+                {
+                    HealthManager health = MainManager.Instance.healthManager;
+
+                    day.moveRingGoal = health.GetMoveGoalDate(dayNum, currentMonth, currentYear);
+                    day.moveRingValue = health.GetMoveRingDate(dayNum, currentMonth, currentYear);
+                    day.exerciseRingValue = health.GetExerciseRingDate(dayNum, currentMonth, currentYear);
+                }
             }
         }
 

@@ -20,10 +20,10 @@ namespace Managers
         private static extern double _getMoveRingGoal();
 
         [DllImport("__Internal")]
-        private static extern void _getMoveRingForDay(int day, int month, int year, MoveRingCallbackDelegate callback);
+        private static extern double _getMoveRingValue(int day, int month, int year);
 
         [DllImport("__Internal")]
-        private static extern void _getExerciseRingForDay(int day, int month, int year, ExerciseRingCallbackDelegate callback);
+        private static extern double _getExerciseRingValue(int day, int month, int year);
 
         public delegate void MoveRingCallbackDelegate(double value);
         public delegate void ExerciseRingCallbackDelegate(double value);
@@ -79,6 +79,29 @@ namespace Managers
             return exerciseRing;
         }
 
+        // Get data for specific dates:
+
+        public double GetMoveRingDate(int day, int month, int year)
+        {
+            return _getMoveRingValue(day, month, year);
+        }
+
+        public double GetMoveGoalDate(int day, int month, int year)
+        {
+            return 500.0;
+            // return _getMoveRingValue(day, month, year);
+        }
+
+        public double GetExerciseRingDate(int day, int month, int year)
+        {
+            return _getExerciseRingValue(day, month, year);
+        }
+
+
+
+
+
+
         // public RingValues GetRingData(int day, int month, int year, MoveRingCallbackDelegate moveCallback, ExerciseRingCallbackDelegate exerciseCallback)
         // {
         //     RingValues ring = new RingValues();
@@ -87,26 +110,26 @@ namespace Managers
         //     return ring;
         // }
 
-        public IEnumerator GetRingData(int day, int month, int year, MoveRingCallbackDelegate moveCallback, ExerciseRingCallbackDelegate exerciseCallback)
-        {
-            bool moveDone = false;
-            bool exerciseDone = false;
+        // public IEnumerator GetRingData(int day, int month, int year, MoveRingCallbackDelegate moveCallback, ExerciseRingCallbackDelegate exerciseCallback)
+        // {
+        //     bool moveDone = false;
+        //     bool exerciseDone = false;
 
-            _getMoveRingForDay(day, month, year,  (double value) => {
-                moveDone = true;
-                moveCallback(value);
-            });
+        //     _getMoveRingForDay(day, month, year,  (double value) => {
+        //         moveDone = true;
+        //         moveCallback(value);
+        //     });
 
-            _getExerciseRingForDay(day, month, year, (double value) => {
-                exerciseDone = true;
-                exerciseCallback(value);
-            });
+        //     _getExerciseRingForDay(day, month, year, (double value) => {
+        //         exerciseDone = true;
+        //         exerciseCallback(value);
+        //     });
 
-            while (!moveDone || !exerciseDone)
-            {
-                yield return null;
-            }
-        }
+        //     while (!moveDone || !exerciseDone)
+        //     {
+        //         yield return null;
+        //     }
+        // }
     }
 }
 

@@ -17,6 +17,9 @@ namespace Managers
         public Dictionary<string, object> inventory;
         public List<string> unlockedPets;
         public List<string> unlockedEnvironments;
+        public DateTime lastMoveReward;
+        public DateTime lastExerciseReward;
+
         void Start()
         {
             // db = FirebaseFirestore.DefaultInstance;
@@ -47,6 +50,15 @@ namespace Managers
                     if (pair.Key == "Inventory")
                     {
                         inventory = (Dictionary<string,object>)pair.Value;
+                    }
+                    else if (pair.Key == "Rewards")
+                    {
+                        Dictionary<string,object> rewards = (Dictionary<string,object>)pair.Value;
+                        // foreach (KeyValuePair<string, object> item in pair.Value.ToDictionary()) {
+                        //     Debug.Log(item);
+                        // }
+                        Debug.Log(rewards["LastExerciseReward"]);
+                        Debug.Log(rewards["LastMoveReward"]);
                     }
                 }
 
