@@ -58,7 +58,7 @@ public class Calendar : MonoBehaviour
                 int dayNum = i - dayOfWeek + 1;
                 day.dayValue = dayNum;
 
-                if (MainManager.Instance != null)
+                if (MainManager.Instance != null && !Application.isEditor)
                 {
                     HealthManager health = MainManager.Instance.healthManager;
 

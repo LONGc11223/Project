@@ -23,9 +23,12 @@ public class HealthHandler : MonoBehaviour
     public TextMeshProUGUI progressText;
     public TextMeshProUGUI debugText;
 
-    double moveRingValue;
-    double moveRingGoal;
-    double exerciseRingValue;
+    public GameObject redConfetti;
+    public GameObject greenConfetti;
+
+    [SerializeField] double moveRingValue;
+    [SerializeField] double moveRingGoal;
+    [SerializeField] double exerciseRingValue;
     bool moveRewardToday;
     bool exerciseRewardToday;
     HealthManager.RingValues rings;
@@ -34,6 +37,7 @@ public class HealthHandler : MonoBehaviour
     Vector2 dailyOrigin;
     Vector2 calendarOrigin;
     Vector2 otherOrigin;
+    DatabaseManager databaseManager;
     
     // Start is called before the first frame update
     void Start()
@@ -41,11 +45,13 @@ public class HealthHandler : MonoBehaviour
         moveRingValue = 450;
         moveRingGoal = 500;
         exerciseRingValue = 15;
-        if (!debug)
+        databaseManager = MainManager.Instance.databaseManager;
+        if (!Application.isEditor)
         {
             moveRingValue = MainManager.Instance.healthManager.GetMoveRing();
             moveRingGoal = MainManager.Instance.healthManager.GetMoveGoal();
             exerciseRingValue = MainManager.Instance.healthManager.GetExerciseRing();
+            
             // StartCoroutine(MainManager.Instance.healthManager.GetRingData(11, 3, 2023, OnMoveRingReceived, OnExerciseRingReceived));
         }
         // Debug.Log(Screen.width);
@@ -60,7 +66,7 @@ public class HealthHandler : MonoBehaviour
     void Update()
     {
         // Debug.Log(Screen.width);
-        if (!debug)
+        if (!Application.isEditor)
         {
             moveRingValue = MainManager.Instance.healthManager.GetMoveRing();
             moveRingGoal = MainManager.Instance.healthManager.GetMoveGoal();
@@ -77,16 +83,24 @@ public class HealthHandler : MonoBehaviour
 
         debugText.text = $"Move - {moveRingValue}\nExercise - {exerciseRingValue}\nGoal - {moveRingGoal}\n\nMarch 11, 2023:\n{rings.moveRingValue}\n{rings.exerciseRingValue}";
 
-        if (!exerciseRewardToday && exerciseRingValue >= 30.0)
+
+        int lastMoveRewardDay = MainManager.Instance.databaseManager.lastMoveReward.Day;
+        int lastExerciseRewardDay = MainManager.Instance.databaseManager.lastExerciseReward.Day;
+
+        if (!exerciseRewardToday && databaseManager.lastExerciseReward.Date != DateTime.Today && exerciseRingValue >= 30.0)
         {
             exerciseRewardToday = true;
-            MainManager.Instance.databaseManager.AddFunds(100);
+            greenConfetti.SetActive(false);
+            greenConfetti.SetActive(true);
+            MainManager.Instance.databaseManager.AddFunds(100, 1);
         }
 
-        if (!moveRewardToday && (moveRingValue / moveRingGoal) >= 1.0)
+        if (!moveRewardToday && databaseManager.lastMoveReward.Date != DateTime.Today && (moveRingValue / moveRingGoal) >= 1.0)
         {
             moveRewardToday = true;
-            MainManager.Instance.databaseManager.AddFunds(100 + (Convert.ToInt32(moveRingValue / 100) * 50));
+            redConfetti.SetActive(false);
+            redConfetti.SetActive(true);
+            MainManager.Instance.databaseManager.AddFunds(100 + (Convert.ToInt32(moveRingValue / 100) * 50), 0);
         }
     }
 

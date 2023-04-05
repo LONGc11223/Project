@@ -57,8 +57,10 @@ namespace Managers
                         // foreach (KeyValuePair<string, object> item in pair.Value.ToDictionary()) {
                         //     Debug.Log(item);
                         // }
-                        Debug.Log(rewards["LastExerciseReward"]);
-                        Debug.Log(rewards["LastMoveReward"]);
+                        // Debug.Log(rewards["LastExerciseReward"]);
+                        // Debug.Log(rewards["LastMoveReward"]);
+                        lastExerciseReward = ((Timestamp)rewards["LastExerciseReward"]).ToDateTime();
+                        lastMoveReward = ((Timestamp)rewards["LastMoveReward"]).ToDateTime();
                     }
                 }
 
@@ -135,12 +137,18 @@ namespace Managers
             
         }
 
-        public void AddFunds(int amount)
+        public void AddFunds(int amount, int type)
         {
             DocumentReference docRef = db.Collection("UserData").Document(MainManager.Instance.authManager.user.UserId);
             Dictionary<string, object> updateData = new Dictionary<string, object>
             {
-                    { "Currency", Convert.ToInt32(MainManager.Instance.databaseManager.currentUserData["Currency"]) + amount },
+                    { "Currency", Convert.ToInt32(MainManager.Instance.databaseManager.currentUserData["Currency"]) + amount},
+                    { "Rewards", new Dictionary<string, object>
+                        {
+                            { "LastExerciseReward", (type == 1) ? DateTime.Now : lastExerciseReward},
+                            { "LastMoveReward", (type == 0) ? DateTime.Now : lastMoveReward}
+                        }
+                    },
             };
             docRef.UpdateAsync(updateData);
         }

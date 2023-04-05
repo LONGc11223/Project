@@ -3274,6 +3274,11 @@ MonoBehaviour:
   exerciseRing: {fileID: 1630484848}
   progressText: {fileID: 1834960230}
   debugText: {fileID: 1877700756}
+  redConfetti: {fileID: 1312765509}
+  greenConfetti: {fileID: 773849009}
+  moveRingValue: 0
+  moveRingGoal: 0
+  exerciseRingValue: 0
 --- !u!4 &277869535 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4731905574177252, guid: 5b5ea93c44ed4437781305935ec54576,
@@ -14091,7 +14096,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &773849010
 RectTransform:
   m_ObjectHideFlags: 0
@@ -29869,7 +29874,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1312765510
 RectTransform:
   m_ObjectHideFlags: 0
