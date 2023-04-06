@@ -3,24 +3,38 @@ using InputSamples.Gestures;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class InfoScreenHandler : MonoBehaviour
 {
+    [Header("Swipe Variables")]
+    bool canSwipe;
+    public float transitionDuration;
     [SerializeField]
     private GestureController gestureController;
 
+    [Header("Page Variables")]
+    public int offset = 0;
+    public List<RectTransform> pages = new List<RectTransform>();
+    List<Vector2> originalPagePositions = new List<Vector2>();
+
     public int currentPage;
-    public TextMeshProUGUI textDisplay;
-    public Image smallImage;
-    public Image largeImage;
+    // public TextMeshProUGUI textDisplay;
+    // public Image smallImage;
+    // public Image largeImage;
     public GameObject pageMarker;
     
-    public List<Sprite> imageContents = new List<Sprite>();
-    [TextArea(5, 7)]
-    public List<string> textContents = new List<string>();
+    // public List<Sprite> imageContents = new List<Sprite>();
+    // [TextArea(5, 7)]
+    // public List<string> textContents = new List<string>();
 
     void Start()
     {
+        for (int i = 0; i < pages.Count; i++)
+        {
+            pages[i].anchoredPosition = new Vector2((Screen.width * i) + ((i != 0) ? offset * i : 0), 0);
+            originalPagePositions.Add(pages[i].anchoredPosition);
+        }
         UpdatePage();
     }
 
@@ -52,17 +66,17 @@ public class InfoScreenHandler : MonoBehaviour
 
     void UpdatePage()
     {
-        textDisplay.text = textContents[currentPage];
-        if (textDisplay.text == "")
-        {
-            largeImage.gameObject.SetActive(true);
-            largeImage.sprite = imageContents[currentPage];
-        }
-        else
-        {
-            largeImage.gameObject.SetActive(false);
-            smallImage.sprite = imageContents[currentPage];
-        }
+        // textDisplay.text = textContents[currentPage];
+        // if (textDisplay.text == "")
+        // {
+        //     largeImage.gameObject.SetActive(true);
+        //     largeImage.sprite = imageContents[currentPage];
+        // }
+        // else
+        // {
+        //     largeImage.gameObject.SetActive(false);
+        //     smallImage.sprite = imageContents[currentPage];
+        // }
 
         switch(currentPage)
         {
@@ -86,7 +100,7 @@ public class InfoScreenHandler : MonoBehaviour
 
     public void NextPage()
     {
-        if (currentPage < textContents.Count - 1) 
+        if (currentPage < pages.Count - 1 && canSwipe) 
         {
             currentPage++;
             UpdatePage();
@@ -94,13 +108,72 @@ public class InfoScreenHandler : MonoBehaviour
         
     }
 
+    IEnumerator ChangePageAnim(int currentPage, int direction)
+    {
+        canSwipe = false;
+
+        float counter = 0;
+
+        while (counter < transitionDuration)
+        {
+            counter += Time.deltaTime;
+
+            for (int i = 0; i < pages.Count; i++)
+            {
+                Vector2 currentPos = pages[i].anchoredPosition;
+                // Vector2 destination = pages[currentPage].anchoredPosition;
+                // pages[i].anchoredPosition = new Vector2((Screen.width * i) + ((i != 0) ? offset * i : 0), 0);
+                // Screen.width = 10
+                // 0,10,20 <-- currentPage == 0
+                // -10,0,10 <-- currentPage == 1 
+                // -20,-10,0 <-- currentPage = 2
+                // nextPage
+                // (Screen.width * (currentPage)) 
+
+                Vector2 newPosition;
+
+                if (direction == 0) // Prev Page
+                {
+                    newPosition = originalPagePositions[0];
+                }
+                else // Next Page
+                {
+                    newPosition = originalPagePositions[0];
+                }
+
+                
+
+                float time = Vector2.Distance(currentPos, newPosition) / (duration - counter) * Time.deltaTime;
+            }
+
+            yield return null;
+        }
+
+        canSwipe = true;
+    }
+
     public void PrevPage()
     {
-        if (currentPage > 0)
+        if (currentPage > 0 && canSwipe)
         {
             currentPage--;
             UpdatePage();
         }
         
+    }
+
+    public void PrevScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+    }
+
+    public void NextScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    }
+
+    public void SetVolume(float volume)
+    {
+        Debug.Log(volume);
     }
 }
