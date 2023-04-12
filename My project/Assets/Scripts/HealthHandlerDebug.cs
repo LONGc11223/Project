@@ -17,7 +17,7 @@ public class HealthHandlerDebug : MonoBehaviour
     private static extern double _getCurrentExerciseRingValue();
 
     [DllImport("__Internal")]
-    private static extern double _getMoveRingGoal();
+    private static extern double _getCurrentMoveRingGoal();
 
     [DllImport("__Internal")]
     private static extern double _getMoveRingValue(int day, int month, int year);
@@ -37,27 +37,6 @@ public class HealthHandlerDebug : MonoBehaviour
     public TMP_InputField monthInput;
     public TMP_InputField yearInput;
 
-    // public IEnumerator GetRingData(int day, int month, int year, MoveRingCallbackDelegate moveCallback, ExerciseRingCallbackDelegate exerciseCallback)
-    // {
-    //     bool moveDone = false;
-    //     bool exerciseDone = false;
-
-    //     _getMoveRingForDay(day, month, year,  (double value) => {
-    //         moveDone = true;
-    //         moveCallback(value);
-    //     });
-
-    //     _getExerciseRingForDay(day, month, year, (double value) => {
-    //         exerciseDone = true;
-    //         exerciseCallback(value);
-    //     });
-
-    //     while (!moveDone || !exerciseDone)
-    //     {
-    //         yield return null;
-    //     }
-    // }
-
     public TextMeshProUGUI healthText;
     // Start is called before the first frame update
     void Start()
@@ -67,7 +46,7 @@ public class HealthHandlerDebug : MonoBehaviour
             _requestAuthorization();
             moveRing = _getCurrentMoveRingValue();
             exerciseRing = _getCurrentExerciseRingValue();
-            moveGoal = _getMoveRingGoal();
+            moveGoal = _getCurrentMoveRingGoal();
         }
         
     }
@@ -83,13 +62,10 @@ public class HealthHandlerDebug : MonoBehaviour
         {
             moveRing = _getCurrentMoveRingValue();
             exerciseRing = _getCurrentExerciseRingValue();
-            moveGoal = _getMoveRingGoal();
+            moveGoal = _getCurrentMoveRingGoal();
             targetMove = _getMoveRingValue(day, month, year);
             targetExercise = _getExerciseRingValue(day, month, year);
         }
-        
-        
-        
 
         healthText.text = $"MoveRing: {moveRing}\nExerciseRing: {exerciseRing}\nGoal: {moveGoal}\n\nOther Date:\n {targetMove}\n{targetExercise}";
     }

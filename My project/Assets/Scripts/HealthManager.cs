@@ -17,10 +17,13 @@ namespace Managers
         private static extern double _getCurrentExerciseRingValue();
 
         [DllImport("__Internal")]
-        private static extern double _getMoveRingGoal();
+        private static extern double _getCurrentMoveRingGoal();
 
         [DllImport("__Internal")]
         private static extern double _getMoveRingValue(int day, int month, int year);
+
+        [DllImport("__Internal")]
+        private static extern double _getMoveRingGoal(int day, int month, int year);
 
         [DllImport("__Internal")]
         private static extern double _getExerciseRingValue(int day, int month, int year);
@@ -49,7 +52,7 @@ namespace Managers
                 _requestAuthorization();
                 moveRing = _getCurrentMoveRingValue();
                 exerciseRing = _getCurrentExerciseRingValue();
-                moveGoal = _getMoveRingGoal();
+                moveGoal = _getCurrentMoveRingGoal();
             }
         }
 
@@ -69,7 +72,7 @@ namespace Managers
 
         public double GetMoveGoal()
         {
-            moveGoal = _getMoveRingGoal();
+            moveGoal = _getCurrentMoveRingGoal();
             return moveGoal;
         }
 
@@ -88,8 +91,8 @@ namespace Managers
 
         public double GetMoveGoalDate(int day, int month, int year)
         {
-            return 500.0;
-            // return _getMoveRingValue(day, month, year);
+            // return 500.0;
+            return _getMoveRingGoal(day, month, year);
         }
 
         public double GetExerciseRingDate(int day, int month, int year)

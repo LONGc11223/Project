@@ -26,8 +26,8 @@ extern "C" {
         return result;
     }
 
-    double _getMoveRingGoal() {
-        double result = [[UnityHealthKit shared] getMoveRingGoal];
+    double _getCurrentMoveRingGoal() {
+        double result = [[UnityHealthKit shared] getCurrentMoveRingGoal];
         return result;
     }
 
@@ -35,41 +35,14 @@ extern "C" {
         double result = [[UnityHealthKit shared] getMoveRingValueWithDay:day month:month year:year];
         return result;
     }
+
+    double _getMoveRingGoal(int day, int month, int year) {
+        double result = [[UnityHealthKit shared] getMoveRingGoalWithDay:day month:month year:year];
+        return result;
+    }
+    
     double _getExerciseRingValue(int day, int month, int year) {
         double result = [[UnityHealthKit shared] getExerciseRingValueWithDay:day month:month year:year];
         return result;
     }
-
-//    void _getMoveRingForDay(int day, int month, int year, void(*callback)(double)) {
-//        [[UnityHealthKit shared] getMoveRingForDayWithDay:day month:month year:year completion:^(double value) {
-//            callback(value);
-//        }];
-//    }
-//
-//    void _getExerciseRingForDay(int day, int month, int year, void(*callback)(double)) {
-//        [[UnityHealthKit shared] getExerciseRingForDayWithDay:day month:month year:year completion:^(double value) {
-//            callback(value);
-//        }];
-//    }
-
-    // typedef struct {
-    //     double moveRingValue;
-    //     double exerciseRingValue;
-    //     double standHoursValue;
-    // } RingValues;
-
-    // RingValues _getRingDataForDate(int day, int month, int year) {
-    //     NSDateComponents *components = [[NSDateComponents alloc] init];
-    //     components.year = year;
-    //     components.month = month;
-    //     components.day = day;
-    //     NSDate *date = [[NSCalendar currentCalendar] dateFromComponents:components];
-    //     NSArray<NSNumber *> *ringData = [[UnityHealthKit shared] getRingDataForDateWithDay:day month:month year:year];
-    //     double moveRingValue = [ringData[0] doubleValue];
-    //     double exerciseRingValue = [ringData[1] doubleValue];
-    //     double standRingValue = [ringData[2] doubleValue];
-    //     RingValues ringValues = {moveRingValue, exerciseRingValue, standRingValue};
-    //     return ringValues;
-    // }
-
 }
