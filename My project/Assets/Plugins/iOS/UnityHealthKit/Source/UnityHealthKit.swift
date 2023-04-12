@@ -19,13 +19,17 @@ import HealthKit
     
     private var moveRingValue: Double = 0.0
     private var moveRingValueForDate: Double = 0.0
+    
+    private var moveGoalValue: Double = 0.0
+    private var moveGoalValueForDate: Double = 0.0
+    
     // private var standRingValue: Double = 0.0
     private var exerciseRingValue: Double = 0.0
     private var exerciseRingValueForDate: Double = 0.0
-    private var moveGoalValue: Double = 0.0
+//    private var moveGoalValue: Double = 0.0
     
     @objc public func requestAuthorization() {
-        let typesToRead = Set([activeEnergyBurnedType, exerciseTimeType])
+        let typesToRead = Set([activeEnergyBurnedType, exerciseTimeType, HKObjectType.activitySummaryType()])
         let typesToShare = Set<HKSampleType>()
         healthStore.requestAuthorization(toShare: typesToShare, read: typesToRead) { success, error in
             if !success {
@@ -63,35 +67,62 @@ import HealthKit
     }
 
     @objc public func getMoveRingGoal() -> Double {
-        func createPredicate() -> NSPredicate? {
-            let calendar = Calendar.autoupdatingCurrent
+        let calendar = Calendar.current
+        let today = Date()
 
-            var dateComponents = calendar.dateComponents([.year, .month, .day],
-                                                         from: Date())
-            dateComponents.calendar = calendar
+        // Set the start and end of the day for which you want to retrieve the move goal
+        let startOfDay = calendar.startOfDay(for: today)
 
-            let predicate = HKQuery.predicateForActivitySummary(with: dateComponents)
-            return predicate
-        }
+        // Define the predicate to retrieve samples for the specified day
+        var dateComponents = calendar.dateComponents([.year, .month, .day], from: Date())
+        dateComponents.calendar = calendar
+        let predicate = HKQuery.predicateForActivitySummary(with: dateComponents)
 
-        let queryPredicate = createPredicate()
-        let query = HKActivitySummaryQuery(predicate: queryPredicate) { (query, summaries, error) -> Void in
-            if let summaries = summaries {
-                for summary in summaries {
-                    let activeEnergyBurned = summary.activeEnergyBurned.doubleValue(for: HKUnit.kilocalorie())
-                    let activeEnergyBurnedGoal = summary.activeEnergyBurnedGoal.doubleValue(for: HKUnit.kilocalorie())
-                    self.moveGoalValue = activeEnergyBurnedGoal
-                    let activeEnergyBurnGoalPercent = round(activeEnergyBurned/activeEnergyBurnedGoal)
-
-                    print("Goal: \(activeEnergyBurnedGoal)")
-                    print(activeEnergyBurnGoalPercent)
-                }
+        // Define the query to retrieve the move goal for the specified day
+        let query = HKActivitySummaryQuery(predicate: predicate) { (query, summaries, error) in
+            guard let summaries = summaries, let summary = summaries.first else {
+                print("Failed to retrieve move goal: \(error?.localizedDescription ?? "unknown error")")
+                return
             }
+            
+            // Retrieve the move goal value in kilocalories
+            self.moveGoalValue = summary.activeEnergyBurnedGoal.doubleValue(for: HKUnit.kilocalorie())
+            
+            print("Move goal for \(startOfDay): \(self.moveGoalValue) kilocalories")
         }
-        
+
         healthStore.execute(query)
-        
         return moveGoalValue
+        
+//        func createPredicate() -> NSPredicate? {
+//            let calendar = Calendar.autoupdatingCurrent
+//
+//            var dateComponents = calendar.dateComponents([.year, .month, .day],
+//                                                         from: Date())
+//            dateComponents.calendar = calendar
+//
+//            let predicate = HKQuery.predicateForActivitySummary(with: dateComponents)
+//            return predicate
+//        }
+//
+//        let queryPredicate = createPredicate()
+//        let query = HKActivitySummaryQuery(predicate: queryPredicate) { (query, summaries, error) -> Void in
+//            if let summaries = summaries {
+//                for summary in summaries {
+//                    let activeEnergyBurned = summary.activeEnergyBurned.doubleValue(for: HKUnit.kilocalorie())
+//                    let activeEnergyBurnedGoal = summary.activeEnergyBurnedGoal.doubleValue(for: HKUnit.kilocalorie())
+//                    self.moveGoalValue = activeEnergyBurnedGoal
+//                    let activeEnergyBurnGoalPercent = round(activeEnergyBurned/activeEnergyBurnedGoal)
+//
+//                    print("Goal: \(activeEnergyBurnedGoal)")
+//                    print(activeEnergyBurnGoalPercent)
+//                }
+//            }
+//        }
+//
+//        healthStore.execute(query)
+//
+//        return moveGoalValue
     }
 
     @objc public func getMoveRingValue(day: Int, month: Int, year: Int) -> Double {

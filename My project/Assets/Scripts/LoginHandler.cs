@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
 using Managers;
-using UnityEngine.SceneManagement;
 
 public class LoginHandler : MonoBehaviour
 {

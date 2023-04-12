@@ -3,18 +3,21 @@ using InputSamples.Gestures;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
+using System.Collections;
 using UnityEngine.SceneManagement;
 
 public class InfoScreenHandler : MonoBehaviour
 {
     [Header("Swipe Variables")]
-    bool canSwipe;
-    public float transitionDuration;
+    bool canSwipe = true;
+    public float transitionDuration = 0.1f;
     [SerializeField]
     private GestureController gestureController;
 
     [Header("Page Variables")]
     public int offset = 0;
+    public RectTransform pageContainer;
     public List<RectTransform> pages = new List<RectTransform>();
     List<Vector2> originalPagePositions = new List<Vector2>();
 
@@ -56,28 +59,18 @@ public class InfoScreenHandler : MonoBehaviour
     {
         if (input.SwipeDirection.x < -0.75f)
         {
+            Debug.Log("Swiped left");
             NextPage();
         } 
         else if (input.SwipeDirection.x > 0.75f)
         {
+            Debug.Log("Swiped right");
             PrevPage();
         }
     }
 
     void UpdatePage()
     {
-        // textDisplay.text = textContents[currentPage];
-        // if (textDisplay.text == "")
-        // {
-        //     largeImage.gameObject.SetActive(true);
-        //     largeImage.sprite = imageContents[currentPage];
-        // }
-        // else
-        // {
-        //     largeImage.gameObject.SetActive(false);
-        //     smallImage.sprite = imageContents[currentPage];
-        // }
-
         switch(currentPage)
         {
             case 0:
@@ -104,11 +97,12 @@ public class InfoScreenHandler : MonoBehaviour
         {
             currentPage++;
             UpdatePage();
+            StartCoroutine(ChangePageAnim(currentPage, 1, transitionDuration));
         }
         
     }
 
-    IEnumerator ChangePageAnim(int currentPage, int direction)
+    IEnumerator ChangePageAnim(int currentPage, int direction,  float duration)
     {
         canSwipe = false;
 
@@ -118,32 +112,18 @@ public class InfoScreenHandler : MonoBehaviour
         {
             counter += Time.deltaTime;
 
-            for (int i = 0; i < pages.Count; i++)
+            Debug.Log("Current Page: " + currentPage);
+            Debug.Log((Screen.width + offset) * currentPage);
+
+            if (direction == 0)
             {
-                Vector2 currentPos = pages[i].anchoredPosition;
-                // Vector2 destination = pages[currentPage].anchoredPosition;
-                // pages[i].anchoredPosition = new Vector2((Screen.width * i) + ((i != 0) ? offset * i : 0), 0);
-                // Screen.width = 10
-                // 0,10,20 <-- currentPage == 0
-                // -10,0,10 <-- currentPage == 1 
-                // -20,-10,0 <-- currentPage = 2
-                // nextPage
-                // (Screen.width * (currentPage)) 
-
-                Vector2 newPosition;
-
-                if (direction == 0) // Prev Page
-                {
-                    newPosition = originalPagePositions[0];
-                }
-                else // Next Page
-                {
-                    newPosition = originalPagePositions[0];
-                }
-
-                
-
-                float time = Vector2.Distance(currentPos, newPosition) / (duration - counter) * Time.deltaTime;
+                Vector2 newPosition = new Vector2(-(Screen.width + offset) * currentPage, 50f);
+                pageContainer.anchoredPosition = Vector2.Lerp(pageContainer.anchoredPosition, newPosition, counter / transitionDuration);
+            }
+            else
+            {
+                Vector2 newPosition = new Vector2(-(Screen.width + offset) * currentPage, 50f);
+                pageContainer.anchoredPosition = Vector2.Lerp(pageContainer.anchoredPosition, newPosition, counter / transitionDuration);
             }
 
             yield return null;
@@ -158,6 +138,7 @@ public class InfoScreenHandler : MonoBehaviour
         {
             currentPage--;
             UpdatePage();
+            StartCoroutine(ChangePageAnim(currentPage, 0, transitionDuration));
         }
         
     }
