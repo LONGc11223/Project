@@ -81,7 +81,7 @@ public class HealthHandler : MonoBehaviour
         moveRing.fillAmount = (float)(moveRingValue / moveRingGoal);
         exerciseRing.fillAmount = (float)(exerciseRingValue / 30);
 
-        debugText.text = $"Move - {moveRingValue}\nExercise - {exerciseRingValue}\nGoal - {moveRingGoal}\n\nMarch 11, 2023:\n{rings.moveRingValue}\n{rings.exerciseRingValue}";
+        debugText.text = $"Move - {moveRingValue}\nExercise - {exerciseRingValue}\nGoal - {moveRingGoal}";
 
 
         int lastMoveRewardDay = MainManager.Instance.databaseManager.lastMoveReward.Day;

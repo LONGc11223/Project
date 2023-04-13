@@ -11638,6 +11638,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 503200091742024493, guid: 05f5527de737b4044af25b3bfcf715c4,
         type: 3}
+      propertyPath: description
+      value: 'Complete the set goal to recieve gifts and currency. '
+      objectReference: {fileID: 0}
+    - target: {fileID: 503200091742024493, guid: 05f5527de737b4044af25b3bfcf715c4,
+        type: 3}
       propertyPath: imageContent
       value: 
       objectReference: {fileID: 21300000, guid: 56579ff87749b8f49b1af98d8feb5723,
@@ -11770,7 +11775,7 @@ PrefabInstance:
     - target: {fileID: 503200091742024493, guid: 05f5527de737b4044af25b3bfcf715c4,
         type: 3}
       propertyPath: description
-      value: qwerty
+      value: 'Set a daily calorie and excersise goal. '
       objectReference: {fileID: 0}
     - target: {fileID: 503200091742024493, guid: 05f5527de737b4044af25b3bfcf715c4,
         type: 3}
@@ -12904,7 +12909,7 @@ PrefabInstance:
     - target: {fileID: 503200091742024493, guid: 05f5527de737b4044af25b3bfcf715c4,
         type: 3}
       propertyPath: description
-      value: jbjhvh
+      value: 'This app is a digital pet that promotes a healthy lifestyle. '
       objectReference: {fileID: 0}
     - target: {fileID: 503200091742024493, guid: 05f5527de737b4044af25b3bfcf715c4,
         type: 3}
