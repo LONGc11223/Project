@@ -11645,7 +11645,7 @@ PrefabInstance:
         type: 3}
       propertyPath: imageContent
       value: 
-      objectReference: {fileID: 21300000, guid: 56579ff87749b8f49b1af98d8feb5723,
+      objectReference: {fileID: 21300000, guid: 99a694eac45434a17be2f83daebca97b,
         type: 3}
     - target: {fileID: 8713423823682309394, guid: 05f5527de737b4044af25b3bfcf715c4,
         type: 3}
@@ -11781,7 +11781,7 @@ PrefabInstance:
         type: 3}
       propertyPath: imageContent
       value: 
-      objectReference: {fileID: 21300006, guid: be58d75910f124ede9f517d31b5ea78f,
+      objectReference: {fileID: 21300000, guid: 771d14a099ee548c6a424584f4685727,
         type: 3}
     - target: {fileID: 8713423823682309394, guid: 05f5527de737b4044af25b3bfcf715c4,
         type: 3}
@@ -12915,7 +12915,7 @@ PrefabInstance:
         type: 3}
       propertyPath: imageContent
       value: 
-      objectReference: {fileID: 21300004, guid: be58d75910f124ede9f517d31b5ea78f,
+      objectReference: {fileID: 21300000, guid: a1b6fa4898d9d4cbf9c1b9c844c94e93,
         type: 3}
     - target: {fileID: 8713423823682309394, guid: 05f5527de737b4044af25b3bfcf715c4,
         type: 3}

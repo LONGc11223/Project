@@ -45,6 +45,7 @@ public class HealthHandler : MonoBehaviour
         moveRingValue = 450;
         moveRingGoal = 500;
         exerciseRingValue = 15;
+        Debug.Log($"{Convert.ToInt32(moveRingValue / (double)moveRingGoal * 100)}%");
         databaseManager = MainManager.Instance.databaseManager;
         if (!Application.isEditor)
         {
@@ -77,7 +78,7 @@ public class HealthHandler : MonoBehaviour
         {
             moveRingGoal = 250;
         }
-        progressText.text = $"{Convert.ToInt32(moveRingValue / (double)moveRingGoal)}%";
+        progressText.text = $"{Convert.ToInt32(moveRingValue / (double)moveRingGoal * 100)}%";
         moveRing.fillAmount = (float)(moveRingValue / moveRingGoal);
         exerciseRing.fillAmount = (float)(exerciseRingValue / 30);
 

@@ -12,6 +12,7 @@ public class InfoPageScript : MonoBehaviour
     public string description;
 
     [Header("Image")]
+    public bool displayImage;
     public Image smallImage;
     public Image largeImage;
     public Sprite imageContent;
@@ -36,6 +37,15 @@ public class InfoPageScript : MonoBehaviour
         {
             largeImage.gameObject.SetActive(false);
             smallImage.sprite = imageContent;
+        }
+
+        if (displayImage)
+        {
+            // render image
+        }
+        else
+        {
+            // show only text
         }
     }
 }
