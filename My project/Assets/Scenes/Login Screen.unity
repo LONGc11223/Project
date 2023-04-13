@@ -3514,7 +3514,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Pet Game
+  m_text: HealthPet
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 16955e59c2acc4a7c9ba28082b412184, type: 2}
   m_sharedMaterial: {fileID: -867233524913456841, guid: 16955e59c2acc4a7c9ba28082b412184,

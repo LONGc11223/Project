@@ -46,6 +46,7 @@ namespace Managers
             auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
             auth.StateChanged += AuthStateChanged;
             AuthStateChanged(this, null);
+            Debug.Log("Firebase Initialized");
         }
 
         void AuthStateChanged(object sender, System.EventArgs eventArgs)

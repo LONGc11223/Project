@@ -49,7 +49,7 @@ public class LoginHandler : MonoBehaviour
     public void SignOutButton()
     {
         AuthManager auth = MainManager.Instance.authManager;
-        Debug.Log("Attempting to login the user!");
+        Debug.Log("Attempting to logout the user!");
         auth.SignOut();
     }
     public void LoginButton()
