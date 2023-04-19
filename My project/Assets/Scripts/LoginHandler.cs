@@ -63,6 +63,13 @@ public class LoginHandler : MonoBehaviour
         StartCoroutine(auth.Login(email,password));
     }
 
+    public void DeleteAccountButton()
+    {
+        AuthManager auth = MainManager.Instance.authManager;
+        Debug.Log("Attempting to delete the user!");
+        auth.DeleteAccount();
+    }
+
     public void GoToInfo()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 2);

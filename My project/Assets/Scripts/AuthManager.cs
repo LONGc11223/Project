@@ -195,6 +195,29 @@ namespace Managers
             auth.SignOut();
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
         }
+
+        public void DeleteAccount()
+        {
+            DocumentReference docRef = db.Collection("UserData").Document(user.UserId);
+                docRef.DeleteAsync().ContinueWith(task => {
+                    Debug.Log("User's save data deleted!.");
+                    user.DeleteAsync().ContinueWith(task => {
+                        if (task.IsCanceled) {
+                            Debug.LogError("DeleteAsync was canceled.");
+                            return;
+                        }
+                        if (task.IsFaulted) {
+                            Debug.LogError("DeleteAsync encountered an error: " + task.Exception);
+                            return;
+                        }
+
+                        Debug.Log("User deleted successfully.");
+                        SignOut();
+                      
+                    });
+                });
+            
+        }
         
     }
 }

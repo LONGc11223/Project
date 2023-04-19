@@ -8,37 +8,27 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:801220637517:android:7cc102fd29bea2e7017d04",
+        "mobilesdk_app_id": "1:801220637517:ios:612a0c3ca00f3b58017d04",
         "android_client_info": {
-          "package_name": "com.long.project"
+          "package_name": "com.long.healthpet"
         }
       },
       "oauth_client": [
         {
-          "client_id": "801220637517-lf8m4gan8tuin4a44r0eipqkgmesost5.apps.googleusercontent.com",
-          "client_type": 3
+          "client_id": "801220637517-6jb67plgi1ppbh3r5fht68f63s3sbsmk.apps.googleusercontent.com"
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAzQXmfxcSVmqHnFKmWXaeDWDcR63tpQyI"
+          "current_key": "AIzaSyCxEATUkw58i_OVDkperPz0Ya77C6WhnLM"
         }
       ],
       "services": {
+        "analytics_service": {
+          "status": 0
+        },
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "801220637517-lf8m4gan8tuin4a44r0eipqkgmesost5.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "801220637517-f0h9j4mpcj0aigbqbi3tgjek9a8us0i0.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.long.project"
-              }
-            }
-          ]
+          "status": 1
         }
       }
     }
