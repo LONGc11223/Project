@@ -23,6 +23,9 @@ public class HealthHandlerDebug : MonoBehaviour
     private static extern double _getMoveRingValue(int day, int month, int year);
 
     [DllImport("__Internal")]
+    private static extern double _getMoveRingGoal(int day, int month, int year);
+
+    [DllImport("__Internal")]
     private static extern double _getExerciseRingValue(int day, int month, int year);
 
     public bool debug;
@@ -32,6 +35,11 @@ public class HealthHandlerDebug : MonoBehaviour
 
     public double targetMove;
     public double targetExercise;
+    public double targetMoveGoal;
+
+    public double altTargetMove;
+    public double altTargetExercise;
+    public double altTargetMoveGoal;
 
     public TMP_InputField dayInput;
     public TMP_InputField monthInput;
@@ -65,9 +73,13 @@ public class HealthHandlerDebug : MonoBehaviour
             moveGoal = _getCurrentMoveRingGoal();
             targetMove = _getMoveRingValue(day, month, year);
             targetExercise = _getExerciseRingValue(day, month, year);
+            targetMoveGoal = _getMoveRingGoal(day, month, year);
+            altTargetMove = _getMoveRingValue(16, 4, 2023);
+            altTargetExercise = _getExerciseRingValue(16, 4, 2023);
+            altTargetMoveGoal = _getMoveRingGoal(16, 4, 2023);
         }
 
-        healthText.text = $"MoveRing: {moveRing}\nExerciseRing: {exerciseRing}\nGoal: {moveGoal}\n\nOther Date:\n {targetMove}\n{targetExercise}";
+        healthText.text = $"MoveRing: {moveRing}\nExerciseRing: {exerciseRing}\nGoal: {moveGoal}\n\nOther Date:\n {targetMove}\n{targetExercise}\n{targetMoveGoal}\n\nAlt Other Date:\n {altTargetMove}\n{altTargetExercise}\n{altTargetMoveGoal}";
     }
 
     public void NextScene()
