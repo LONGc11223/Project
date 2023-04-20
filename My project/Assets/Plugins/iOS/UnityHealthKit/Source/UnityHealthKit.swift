@@ -95,7 +95,7 @@ import HealthKit
         return moveGoalValue
     }
 
-    @objc public func getMoveRingValue(day: Int, month: Int, year: Int) -> Double {
+    @objc public func getMoveRingValue(day: Int, month: Int, year: Int, completion: @escaping (Double) -> Void) {
         let calendar = Calendar.current
         let components = DateComponents(year: year, month: month, day: day)
         let startOfDay = calendar.startOfDay(for: calendar.date(from: components)!)
@@ -104,21 +104,22 @@ import HealthKit
         
         // print("Move ring: \(startOfDay)")
         
-        guard let sampleType = HKSampleType.quantityType(forIdentifier: .activeEnergyBurned) else { return 0 }
+        guard let sampleType = HKSampleType.quantityType(forIdentifier: .activeEnergyBurned) else { return }
 //        let startDate = Calendar.current.startOfDay(for: Date())
         let predicate = HKQuery.predicateForSamples(withStart: startOfDay, end: endOfDay, options: .strictEndDate)
         let query = HKStatisticsQuery(quantityType: sampleType, quantitySamplePredicate: predicate, options: .cumulativeSum) { _, result, _ in
             if let sum = result?.sumQuantity() {
-                self.moveRingValueForDate = sum.doubleValue(for: HKUnit.jouleUnit(with: .kilo)) * 0.239
-                // print("Move ring value: \(self.moveRingValueForDate)")
+                var moveRing = sum.doubleValue(for: HKUnit.jouleUnit(with: .kilo)) * 0.239
+                // Call the completion handler with the result
+                completion(moveRing)
             }
         }
         healthStore.execute(query)
         // print("Move for date: \(moveRingValueForDate)");
-        return moveRingValueForDate
+        // return moveRingValueForDate
     }
 
-    @objc public func getMoveRingGoal(day: Int, month: Int, year: Int) -> Double {
+    @objc public func getMoveRingGoal(day: Int, month: Int, year: Int, completion: @escaping (Double) -> Void) {
         let calendar = Calendar.current
         var components = DateComponents(year: year, month: month, day: day)
         let startOfDay = calendar.startOfDay(for: calendar.date(from: components)!)
@@ -136,16 +137,17 @@ import HealthKit
             }
             
             // Retrieve the move goal value in kilocalories
-            self.moveGoalValueForDate = summary.activeEnergyBurnedGoal.doubleValue(for: HKUnit.kilocalorie())
+            var moveGoal = summary.activeEnergyBurnedGoal.doubleValue(for: HKUnit.kilocalorie())
             
-            print("Move goal for \(startOfDay): \(self.moveGoalValueForDate) kilocalories")
+            print("Move goal for \(startOfDay): \(moveGoal) kilocalories")
+            completion(moveGoal)
         }
 
         healthStore.execute(query)
-        return moveGoalValueForDate
+        // return moveGoalValueForDate
     }
     
-    @objc public func getExerciseRingValue(day: Int, month: Int, year: Int) -> Double {
+    @objc public func getExerciseRingValue(day: Int, month: Int, year: Int, completion: @escaping (Double) -> Void) {
         let calendar = Calendar.current
         let components = DateComponents(year: year, month: month, day: day)
         let startOfDay = calendar.startOfDay(for: calendar.date(from: components)!)
@@ -154,16 +156,18 @@ import HealthKit
         
         // print("Exercise ring: \(startOfDay)")
         
-        guard let sampleType = HKSampleType.quantityType(forIdentifier: .appleExerciseTime) else { return 0 }
+        guard let sampleType = HKSampleType.quantityType(forIdentifier: .appleExerciseTime) else { return }
 //        let startDate = Calendar.current.startOfDay(for: Date())
         let predicate = HKQuery.predicateForSamples(withStart: startOfDay, end: endOfDay, options: .strictEndDate)
         let query = HKStatisticsQuery(quantityType: sampleType, quantitySamplePredicate: predicate, options: .cumulativeSum) { _, result, _ in
             if let sum = result?.sumQuantity() {
-                self.exerciseRingValueForDate = sum.doubleValue(for: HKUnit.minute())
+                var exerciseRing = sum.doubleValue(for: HKUnit.minute())
                 // print("Exercise ring value: \(self.exerciseRingValueForDate)")
+                // Call the completion handler with the result
+                completion(exerciseRing)
             }
         }
         healthStore.execute(query)
-        return exerciseRingValueForDate
+        // return exerciseRingValueForDate
     }
 }

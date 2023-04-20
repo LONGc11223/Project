@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Managers
@@ -28,8 +29,8 @@ namespace Managers
         [DllImport("__Internal")]
         private static extern double _getExerciseRingValue(int day, int month, int year);
 
-        public delegate void MoveRingCallbackDelegate(double value);
-        public delegate void ExerciseRingCallbackDelegate(double value);
+        // public delegate void MoveRingCallbackDelegate(double value);
+        // public delegate void ExerciseRingCallbackDelegate(double value);
 
         [System.Serializable]
         public struct RingValues {
@@ -50,6 +51,16 @@ namespace Managers
             if (!Application.isEditor)
             {
                 _requestAuthorization();
+                moveRing = _getCurrentMoveRingValue();
+                exerciseRing = _getCurrentExerciseRingValue();
+                moveGoal = _getCurrentMoveRingGoal();
+            }
+        }
+
+        void Update()
+        {
+            if (!Application.isEditor)
+            {
                 moveRing = _getCurrentMoveRingValue();
                 exerciseRing = _getCurrentExerciseRingValue();
                 moveGoal = _getCurrentMoveRingGoal();
@@ -100,9 +111,39 @@ namespace Managers
             return _getExerciseRingValue(day, month, year);
         }
 
+        public async Task<double> GetMoveRingValueAsync(int day, int month, int year)
+        {
+            double result = await Task.Run(() => _getMoveRingValue(day, month, year));
+            return result;
+        }
 
+        public async Task<double> GetExerciseRingValueAsync(int day, int month, int year)
+        {
+            double result = await Task.Run(() => _getExerciseRingValue(day, month, year));
+            return result;
+        }
 
+        public async Task<double> GetMoveRingGoalAsync(int day, int month, int year)
+        {
+            double result = await Task.Run(() => _getMoveRingGoal(day, month, year));
+            return result;
+        }
 
+        // async Task<(double, double, double)> GetRings(int day, int month, int year)
+        // {
+        //     double moveRing = await GetMoveRingValueAsync(day, month, year);
+        //     double exerciseRing = await GetExerciseRingValueAsync(day, month, year);
+        //     double moveGoal = await GetMoveRingGoalAsync(day, month, year);
+
+        //     return (moveRing, exerciseRing, moveGoal);
+        // }
+
+        // IEnumerator UpdateRingDataCoroutine(int day, int month, int year)
+        // {
+        //     (double, double, double) result = GetRings(day, month, year);
+        //     isUpdateRingRunning = false;
+        //     yield return null;
+        // }
 
 
         // public RingValues GetRingData(int day, int month, int year, MoveRingCallbackDelegate moveCallback, ExerciseRingCallbackDelegate exerciseCallback)

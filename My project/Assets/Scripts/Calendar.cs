@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,8 +20,8 @@ public class Calendar : MonoBehaviour
         Saturday,
     }
     public Days startingDay;
-    public int currentMonth = 1;
-    public int currentYear = 2020;
+    public int currentMonth = DateTime.Now.Month;
+    public int currentYear = DateTime.Now.Year;
     public TextMeshProUGUI monthText;
     public TextMeshProUGUI yearText;
     public Button nextButton;
@@ -28,9 +29,33 @@ public class Calendar : MonoBehaviour
     public GameObject entries;
     DateTime now;
 
+    bool shouldUpdateRings = true;
+
+    async void GetRings(int day, int month, int year, DayEntry entry)
+    {
+        HealthManager health = MainManager.Instance.healthManager;
+        double moveRing = await health.GetMoveRingValueAsync(day, month, year);
+        double exerciseRing = await health.GetExerciseRingValueAsync(day, month, year);
+        double moveGoal = await health.GetMoveRingGoalAsync(day, month, year);
+        Debug.Log($"On {month}/{day}/{year}, moveRing = {moveRing}, exerciseRing = {exerciseRing}, moveGoal = {moveGoal}");
+
+        entry.moveRingValue = moveRing;
+        entry.moveRingGoal = moveGoal;
+        entry.exerciseRingValue = exerciseRing;
+    }
+
+    IEnumerator UpdateRingDataCoroutine(int day, int month, int year, DayEntry entry)
+    {
+        GetRings(day, month, year, entry);
+        // isUpdateRingRunning--;
+        yield return null;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
+        currentMonth = DateTime.Now.Month;
+        currentYear = DateTime.Now.Year;
         monthText.text = MonthToText(currentMonth);
         yearText.text = $"{currentYear}";
         now = DateTime.Now;
@@ -45,29 +70,67 @@ public class Calendar : MonoBehaviour
         // Debug.Log($"On {currentMonth}/{currentYear}, the first day starts at {referenceDay.DayOfWeek}");
         // Debug.Log($"This month starts on the day {dayOfWeek} and has {days} days");
 
-        for (int i = 0; i < 35; i++)
+        if (shouldUpdateRings)
         {
-            if (i < dayOfWeek || i >= dayOfWeek+days)
+            for (int i = 0; i < 35; i++)
             {
-                entries.transform.GetChild(i).gameObject.GetComponent<DayEntry>().hide = true;
-            }
-            else // valid day
-            {
-                DayEntry day = entries.transform.GetChild(i).gameObject.GetComponent<DayEntry>();
-                day.hide = false;
-                int dayNum = i - dayOfWeek + 1;
-                day.dayValue = dayNum;
-
-                if (MainManager.Instance != null && !Application.isEditor)
+                if (i < dayOfWeek || i >= dayOfWeek+days)
                 {
-                    HealthManager health = MainManager.Instance.healthManager;
+                    entries.transform.GetChild(i).gameObject.GetComponent<DayEntry>().hide = true;
+                }
+                else // valid day
+                {
+                    DayEntry day = entries.transform.GetChild(i).gameObject.GetComponent<DayEntry>();
+                    day.hide = false;
+                    int dayNum = i - dayOfWeek + 1;
+                    day.dayValue = dayNum;
 
-                    day.moveRingGoal = health.GetMoveGoalDate(dayNum, currentMonth, currentYear);
-                    day.moveRingValue = health.GetMoveRingDate(dayNum, currentMonth, currentYear);
-                    day.exerciseRingValue = health.GetExerciseRingDate(dayNum, currentMonth, currentYear);
+                    if (!Application.isEditor)
+                    {
+                        // HealthManager health = MainManager.Instance.healthManager;
+
+                        // day.moveRingGoal = health.GetMoveGoalDate(dayNum, currentMonth, currentYear);
+                        // day.moveRingValue = health.GetMoveRingDate(dayNum, currentMonth, currentYear);
+                        // day.exerciseRingValue = health.GetExerciseRingDate(dayNum, currentMonth, currentYear);
+                        
+                        // isUpdateRingRunning++;
+                        if (currentMonth == DateTime.Now.Month && currentYear == DateTime.Now.Year && dayNum > DateTime.Now.Day)
+                        {
+                            // if (currentMonth == DateTime.Now.Month && currentYear == DateTime.Now.Year && dayNum == DateTime.Now.Day)
+                            // {
+                            //     day.moveRingValue = MainManager.Instance.healthManager.moveRing;
+                            //     day.moveRingGoal = MainManager.Instance.healthManager.moveGoal;
+                            //     day.exerciseRingValue = MainManager.Instance.healthManager.exerciseRing;
+                            // }
+                            // else
+                            // {
+                            //     day.moveRingValue = 0;
+                            //     day.exerciseRingValue = 0;
+                            // }
+                            day.moveRingValue = 0;
+                            day.exerciseRingValue = 0;
+                        }
+                        else
+                        {
+                            if (currentMonth == DateTime.Now.Month && currentYear == DateTime.Now.Year && dayNum == DateTime.Now.Day)
+                            {
+                                day.moveRingValue = MainManager.Instance.healthManager.moveRing;
+                                day.moveRingGoal = MainManager.Instance.healthManager.moveGoal;
+                                day.exerciseRingValue = MainManager.Instance.healthManager.exerciseRing;
+                            }
+                            else
+                            {
+                                StartCoroutine(UpdateRingDataCoroutine(dayNum, currentMonth, currentYear, day));
+                            }
+                            
+                        }
+                    }
                 }
             }
+            shouldUpdateRings = false;
+            // Debug.Log($"Updating {isUpdateRingRunning} days' rings");
         }
+        
 
 
 
@@ -101,6 +164,7 @@ public class Calendar : MonoBehaviour
         }
         monthText.text = MonthToText(currentMonth);
         yearText.text = $"{currentYear}";
+        shouldUpdateRings = true;
     }
 
     public void LastMonth()
@@ -116,6 +180,7 @@ public class Calendar : MonoBehaviour
         }
         monthText.text = MonthToText(currentMonth);
         yearText.text = $"{currentYear}";
+        shouldUpdateRings = true;
     }
 
     string MonthToText(int month)
