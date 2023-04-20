@@ -59,6 +59,7 @@ namespace Managers
                 if (!loggedIn && user != null)
                 {
                     Debug.Log("User logged out");
+                    SceneManager.LoadScene("Login Screen");
                     active = false;
                 }
 

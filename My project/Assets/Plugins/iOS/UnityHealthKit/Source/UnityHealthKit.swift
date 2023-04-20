@@ -136,13 +136,13 @@ import HealthKit
             }
             
             // Retrieve the move goal value in kilocalories
-            self.moveGoalValue = summary.activeEnergyBurnedGoal.doubleValue(for: HKUnit.kilocalorie())
+            self.moveGoalValueForDate = summary.activeEnergyBurnedGoal.doubleValue(for: HKUnit.kilocalorie())
             
-            print("Move goal for \(startOfDay): \(self.moveGoalValue) kilocalories")
+            print("Move goal for \(startOfDay): \(self.moveGoalValueForDate) kilocalories")
         }
 
         healthStore.execute(query)
-        return moveGoalValue
+        return moveGoalValueForDate
     }
     
     @objc public func getExerciseRingValue(day: Int, month: Int, year: Int) -> Double {
