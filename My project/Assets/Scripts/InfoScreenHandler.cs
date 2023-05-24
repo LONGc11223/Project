@@ -6,6 +6,7 @@ using TMPro;
 using System;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using Managers;
 
 public class InfoScreenHandler : MonoBehaviour
 {
@@ -30,6 +31,11 @@ public class InfoScreenHandler : MonoBehaviour
     // public List<Sprite> imageContents = new List<Sprite>();
     // [TextArea(5, 7)]
     // public List<string> textContents = new List<string>();
+
+    void Awake() 
+    {
+        StartCoroutine(NotificationManager.RequestAuthorization());
+    }
 
     void Start()
     {
