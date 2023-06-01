@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+// using Managers;
 
 namespace Managers
 {
@@ -10,6 +11,7 @@ namespace Managers
         public AuthManager authManager;
         public DatabaseManager databaseManager;
         public HealthManager healthManager;
+        public NotificationManager notificationManager;
         [HideInInspector] public bool setup;
 
         void Awake()
@@ -19,6 +21,7 @@ namespace Managers
             authManager = GetComponent<AuthManager>();
             databaseManager = GetComponent<DatabaseManager>();
             healthManager = GetComponent<HealthManager>();
+            notificationManager = GetComponent<NotificationManager>();
             setup = true;
         }
     }

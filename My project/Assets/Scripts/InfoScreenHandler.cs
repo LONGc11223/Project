@@ -34,7 +34,7 @@ public class InfoScreenHandler : MonoBehaviour
 
     void Awake() 
     {
-        StartCoroutine(NotificationManager.RequestAuthorization());
+        StartCoroutine(MainManager.Instance.notificationManager.RequestAuthorization());
     }
 
     void Start()

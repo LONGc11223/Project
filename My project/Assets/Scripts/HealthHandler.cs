@@ -42,7 +42,7 @@ public class HealthHandler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        NotificationManager.PrepareNotification();
+        MainManager.Instance.notificationManager.PrepareNotification();
         moveRingValue = 450;
         moveRingGoal = 500;
         exerciseRingValue = 15;
@@ -142,6 +142,11 @@ public class HealthHandler : MonoBehaviour
         {
             PrevPage();
         }
+    }
+
+    public void SendTestNotification()
+    {
+        MainManager.Instance.notificationManager.TestNotification();
     }
 
     public void NextPage()

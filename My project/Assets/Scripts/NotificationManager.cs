@@ -1,4 +1,5 @@
 using System.Collections;
+using System;
 // using System.Collections.Generic;
 // using System.Runtime.InteropServices;
 // using System.Threading.Tasks;
@@ -9,7 +10,7 @@ namespace Managers
 {
     public class NotificationManager : MonoBehaviour
     {
-        public static IEnumerator RequestAuthorization()
+        public IEnumerator RequestAuthorization()
         {
             var authorizationOption = AuthorizationOption.Alert | AuthorizationOption.Badge;
             using (var req = new AuthorizationRequest(authorizationOption, true))
@@ -28,15 +29,41 @@ namespace Managers
             }
         }
 
-        public static void PrepareNotification()
+        public void TestNotification()
+        {
+            var timeTrigger = new iOSNotificationTimeIntervalTrigger()
+            {
+                TimeInterval = new TimeSpan(0, 0, 5),
+                Repeats = false
+            };
+
+            var testNotification = new iOSNotification()
+            {
+                // You can specify a custom identifier which can be used to manage the notification later.
+                // If you don't provide one, a unique string will be generated automatically.
+                Identifier = "_notification_02",
+                Title = "Test Notification",
+                Body = "Scheduled at: " + DateTime.Now.ToShortDateString() + " triggered in 5 seconds",
+                Subtitle = "This is a subtitle, something, something important...",
+                ShowInForeground = true,
+                ForegroundPresentationOption = (PresentationOption.Alert | PresentationOption.Sound),
+                CategoryIdentifier = "category_a",
+                ThreadIdentifier = "thread1",
+                Trigger = timeTrigger,
+            };
+
+            iOSNotificationCenter.ScheduleNotification(testNotification);
+        }
+
+        public void PrepareNotification()
         {
             // Get all scheduled notifications
             var notifications = iOSNotificationCenter.GetScheduledNotifications();
 
             // Check if our notification is already scheduled
-            foreach (var notification in notifications)
+            foreach (var element in notifications)
             {
-                if (notification.Identifier == "_notification_01")
+                if (element.Identifier == "_notification_01")
                 {
                     // Our notification is already scheduled, so we can return early
                     return;
